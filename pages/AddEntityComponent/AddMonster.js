@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text} from 'react-native';
 import {Button} from 'react-native-elements'
+import {Tab, Tabs } from 'native-base';
 import LeftRightBar from '../../components/LeftRightBar'
 
 class AddMonster extends React.PureComponent {
@@ -8,7 +9,17 @@ class AddMonster extends React.PureComponent {
     const {navigate} = this.props.navigation;
     return (
       <LeftRightBar navigation={this.props.navigation}>
-        <Text style={{color:'red'}}> AddMonster </Text>
+        <Tabs>
+          <Tab heading="Tab1">
+            <Text> Tab1 </Text>
+          </Tab>
+          <Tab heading="Tab2">
+            <Text> Tab2 </Text>
+          </Tab>
+          <Tab heading="Tab3">
+            <Text> Tab3 </Text>
+          </Tab>
+        </Tabs>
       </LeftRightBar>
     );
   }

@@ -1,9 +1,24 @@
 import React from 'react';
-import {View,Text, StyleSheet, TouchableOpacity } from 'react-native';
-import {Avatar, Button,Icon, Input} from 'react-native-elements'
+import {View, StyleSheet, TouchableOpacity } from 'react-native';
+import {Button,Icon} from 'react-native-elements'
+import {Thumbnail,Text} from 'native-base'
 import LeftRightBar from '../../components/LeftRightBar'
 import AddHeroStats from './AddHeroStats'
 import heroesList from './heroes-list'
+import {connect} from "react-redux";
+import {addHero} from '../../redux/actions/act-heroes'
+
+const mapStateToProps = state => {
+  return {
+    heroes: state.Heroes,
+   };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addHero: hero => dispatch(addHero(hero)),
+  };
+};
 
 class AddHero extends React.PureComponent {
   constructor (props) {
@@ -21,7 +36,8 @@ class AddHero extends React.PureComponent {
   }
 
   createHero = (heroId,heroHp,heroMp,heroDef) => {
-    console.log(heroId,heroHp,heroMp,heroDef)
+    const hero = {heroId,heroHp,heroMp,heroDef};
+    this.props.addHero(hero)
   }
 
   setHero = (heroId) => {
@@ -31,9 +47,11 @@ class AddHero extends React.PureComponent {
     const {heroes,heroesIds} = heroesList
     return heroesIds.map( (heroId) => {
       const hero = heroes[heroId]
+      let isDisabled = false;
+      if(this.props.heroes.find(elem => elem.id == heroId)) isDisabled = true;
       return (
-        <TouchableOpacity key={heroId} activeOpacity={0.7} style={{alignItems:'center',width: '33%', marginVertical:10}} onPress={() => {this.toggleModal(true);this.setHero(heroId)}}>
-          <Avatar size="large" source={hero.image} />
+        <TouchableOpacity key={heroId} disabled={isDisabled} activeOpacity={0.7} style={{alignItems:'center',width: '33%', marginVertical:10}} onPress={() => {this.toggleModal(true);this.setHero(heroId)}}>
+          <Thumbnail square large source={hero.image} style={isDisabled?{opacity: 0.3}:{}}  />
           <Text style={{color:'white'}}>{hero.label}</Text>
         </TouchableOpacity>)
     })
@@ -71,6 +89,7 @@ class AddHero extends React.PureComponent {
           />
           {/*Bottone Undo*/}
           <Button
+            onPress={() => console.log("UNDO")}
             icon={
               <Icon
               raised
@@ -93,5 +112,4 @@ class AddHero extends React.PureComponent {
   }
 }
 
-
-export default AddHero;
+export default connect(mapStateToProps,mapDispatchToProps)(AddHero);

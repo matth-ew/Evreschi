@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Button,Text} from 'native-base'
+import {Button,Text,H3,Container} from 'native-base'
 import LeftRightBar from '../components/LeftRightBar'
 
 class AddEntity extends React.Component {
@@ -13,27 +13,29 @@ class AddEntity extends React.Component {
   render() {
     const {navigate} = this.props.navigation;
     return (
-      <LeftRightBar navigation={this.props.navigation}>
-        <View style={styles.overlayBackground}>
-          <View style={styles.overlay}>
-            <Text h3>Cosa vuoi aggiungere?</Text>
-            <View style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-              width: '100%'
-            }}>
-              <Button primary onPress={() => {this.setState({ isVisible: false }); navigate('AddHero')}}>
-                <Text>Eroe</Text>
-              </Button>
-              <Button danger onPress={() => {this.setState({ isVisible: false }); navigate('AddMonster')}}>
-                <Text>Mostro</Text>
-              </Button>
+      <Container>
+        <LeftRightBar navigation={this.props.navigation}>
+          <View style={styles.overlayBackground}>
+            <View style={styles.overlay}>
+              <H3 style={{flex: 1,marginVertical: '5%'}}>Cosa vuoi aggiungere?</H3>
+              <View style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-around',
+                width: '100%'
+              }}>
+                <Button primary onPress={() => {this.setState({ isVisible: false }); navigate('AddHero')}}>
+                  <Text>Eroe</Text>
+                </Button>
+                <Button danger onPress={() => {this.setState({ isVisible: false }); navigate('AddMonster')}}>
+                  <Text>Mostro</Text>
+                </Button>
+              </View>
             </View>
           </View>
-        </View>
-      </LeftRightBar>
+        </LeftRightBar>
+      </Container>
     );
   }
 }

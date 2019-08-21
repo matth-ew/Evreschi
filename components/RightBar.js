@@ -2,7 +2,18 @@ import React from 'react';
 import {Text,View,SafeAreaView, ImageBackground, ScrollView} from 'react-native';
 import {Button, Header, Avatar, Icon} from 'react-native-elements'
 
+
 class RightBar extends React.PureComponent {
+
+  handleEdit = () => {
+    // Need to check to prevent null exception.
+    this.props.editFunction?.(); // Same as this.props.onPress && this.props.onPress();
+  }
+  handleDelete = () => {
+    // Need to check to prevent null exception.
+    this.props.deleteFunction?.(); // Same as this.props.onPress && this.props.onPress();
+  }
+
   render() {
     const {navigate} = this.props.navigation;
     return(
@@ -15,22 +26,24 @@ class RightBar extends React.PureComponent {
               style={{alignSelf:'flex-start'}}
               onPress={() => console.log("Works!")}
         />
-        <Icon raised
+        {this.props.editFunction && (
+          <Icon raised
               name='account-edit'
               color='grey'
               type='material-community'
               iconStyle={{fontSize:35}}
               style={{alignSelf:'flex-end'}}
-              onPress={() => console.log("Works!")}
-        />
-        <Icon raised
+              onPress={() => this.handleEdit()}
+        />)}
+        {this.props.cancelFunction && (
+          <Icon raised
               name='close-circle'
               color='grey'
               type='material-community'
               iconStyle={{fontSize:35}}
               style={{alignSelf:'flex-end'}}
-              onPress={() => console.log("Works!")}
-        />
+              onPress={() => this.handleDelete()}
+        />)}
       </View>
     )
   }

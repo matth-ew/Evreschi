@@ -1,6 +1,6 @@
 import React from 'react';
 import {View,Text, StyleSheet, TouchableOpacity } from 'react-native';
-import {Avatar, Button,Icon, Input} from 'react-native-elements';
+import {Icon, Input} from 'react-native-elements';
 
 
 class AddHeroStats extends React.PureComponent {
@@ -36,6 +36,7 @@ class AddHeroStats extends React.PureComponent {
   }
 
   render() {
+    let isDisabled = (!this.state.heroHp || !this.state.heroMp || !this.state.heroDef)
     if(!this.props.isVisible){
       return (<View/>)
     }
@@ -61,7 +62,7 @@ class AddHeroStats extends React.PureComponent {
                 <Icon
                   name='water'
                   size={24}
-                  color='blue'
+                  color='yellow'
                   type='material-community'
                 />
               }
@@ -90,9 +91,9 @@ class AddHeroStats extends React.PureComponent {
                 width: '100%'
               }}
             >
-              <TouchableOpacity
+              <TouchableOpacity disabled={isDisabled}
                 onPress={this.submitButton}>
-                <Text>Crea</Text>
+                <Text style={isDisabled?{opacity: 0.3}:{}}>Crea</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={this.backButton}>

@@ -1,11 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar} from 'react-native';
 import { AppLoading } from 'expo';
+
 import HomeScreen from "./pages/HomeScreen"
 import MainScreen from "./pages/MainScreen"
 import AddEntity from "./pages/AddEntity"
 import AddMonster from "./pages/AddEntityComponent/AddMonster"
 import AddHero from "./pages/AddEntityComponent/AddHero"
+import HeroScreen from "./pages/HeroScreen"
+import MonsterScreen from "./pages/MonsterScreen"
+
 import { createStore } from "redux";
 import { Provider } from "react-redux"
 import rootReducer from "./redux/reducers/reducer";
@@ -19,6 +23,34 @@ const store = createStore(rootReducer);
 
 useScreens();
 
+const HeroNavigator = createSwitchNavigator({
+  HeroScreen: {screen: HeroScreen},
+  /*AddHero: {screen: AddHero},
+  AddMonster: {screen: AddMonster}*/
+}, {
+    initialRouteName: 'HeroScreen',
+    animationEnabled: false,
+    swipeEnabled: false,
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    }
+});
+
+const MonsterNavigator = createSwitchNavigator({
+  MonsterScreen: {screen: MonsterScreen},
+  /*AddHero: {screen: AddHero},
+  AddMonster: {screen: AddMonster}*/
+}, {
+    initialRouteName: 'MonsterScreen',
+    animationEnabled: false,
+    swipeEnabled: false,
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    }
+});
+
 const AddEntityNavigator = createSwitchNavigator({
   AddEntity: {screen: AddEntity},
   AddHero: {screen: AddHero},
@@ -31,15 +63,19 @@ const AddEntityNavigator = createSwitchNavigator({
     navigationOptions: {
       headerVisible: false,
     }
-  });
+});
+
+
 
 
 let Navigator = createSwitchNavigator({
   Home: {screen: HomeScreen},
   Main: {screen: MainScreen},
+  Hero: {screen: HeroNavigator},
+  Monster: {screen: MonsterNavigator},
   AddEntity: {screen: AddEntityNavigator}
 }, {
-    initialRouteName: 'AddEntity',
+    initialRouteName: 'Home',
     animationEnabled: false,
     swipeEnabled: false,
     headerMode: 'none',

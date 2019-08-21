@@ -19,7 +19,7 @@ class LeftRightBar extends React.Component  {
               {this.props.children}
             </View>
 
-            <RightBar navigation={this.props.navigation}/>
+            <RightBar navigation={this.props.navigation} editFunction={this.props.editFunction} deleteFunction={this.props.deleteFunction}/>
 
           </View>
         </ImageBackground>

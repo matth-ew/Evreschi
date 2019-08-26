@@ -1,29 +1,148 @@
 import React from 'react';
-import {} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {Thumbnail,Button, Text, View} from 'native-base'
 import LeftRightBar from '../components/LeftRightBar'
 import {connect} from "react-redux";
-import heroesList from '../pages/AddEntityComponent/heroes-list'
-//import {addHero} from '../../redux/actions/act-heroes'
+import heroesList from '../components/heroes-list'
+import Health from './HMComponent/Health'
+import Defence from './HMComponent/Defence'
+import Mana from './HMComponent/Mana'
+import Fury from './HMComponent/Fury'
+import DamagePopup from './HMComponent/DamagePopup'
+import HealPopup from './HMComponent/HealPopup'
+import AlteredStatusPopup from './HMComponent/AlteredStatusPopup'
+import BonusMalusPopup from './HMComponent/BonusMalusPopup'
+import EditHeroPopup from './HMComponent/EditHeroPopup'
+import AddAnimalPopup from './HMComponent/AddAnimalPopup'
+import {changeHero,heroDamage,heroMana,heroHeal,heroFury,heroDefence,heroAltered} from '../redux/actions/act-heroes'
 
 const mapStateToProps = state => {
   return {
     heroes: state.Heroes,
+    settings: state.Settings,
    };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    //addHero: hero => dispatch(addHero(hero)),
+    changeHero: hero => dispatch(changeHero(hero)),
+    heroDamage: (id,damage) => dispatch(heroDamage(id,damage)),
+    heroMana: (id,value) => dispatch(heroMana(id,value)),
+    heroHeal: (hero_heal) => dispatch(heroHeal(hero_heal)),
+    heroAltered: (hero_altered) => dispatch(heroAltered(hero_altered)),
+    heroFury: (id,value) => dispatch(heroFury(id,value)),
+    heroDefence: (id,value) => dispatch(heroDefence(id,value)),
   };
 };
 
 class HeroScreen extends React.Component {
 
-  editFunction = () => {
-    //APRE IL MODAL PER MODIFICARE L'EROE!
-    console.log("EDIT")
+  constructor (props) {
+    super(props)
+    this.state = {
+      isDamageVisible: false,
+      isHealVisible: false,
+      isAlteredStatusVisible: false,
+      isBonusMalusVisible: false,
+      isEditHeroVisible: false,
+      isAnimalVisible: false,
+    }
   }
+
+  toggleDamageModal = (visibility) => {
+    this.setState({isDamageVisible: visibility})
+  }
+  toggleFuryModal = (visibility) => {
+    this.setState({isFuryVisible: visibility})
+  }
+  toggleHealModal = (visibility) => {
+    this.setState({isHealVisible: visibility})
+  }
+  toggleAlteredStatusModal = (visibility) => {
+    this.setState({isAlteredStatusVisible: visibility})
+  }
+  toggleBonusMalusModal = (visibility) => {
+    this.setState({isBonusMalusVisible: visibility})
+  }
+  toggleEditHero = () => {
+    this.setState(prevState => ({
+        isEditHeroVisible: !prevState.isEditHeroVisible
+      })
+    )
+  }
+
+  toggleAnimal = () => {
+    this.setState(prevState => ({
+        isAnimalVisible: !prevState.isAnimalVisible
+      })
+    )
+  }
+
+  submitEditHero = (heroHp,heroMp,heroDef) => {
+    const heroId = this.props.navigation.getParam('heroId', 'NO-ID');
+    this.props.changeHero({id:heroId,heroHp,heroMp,heroDef})
+  }
+
+  submitDamage = (dice,multiplier,critical,poison,burn) => {
+    const heroId = this.props.navigation.getParam('heroId', 'NO-ID');
+    const hero = this.props.heroes.find(hero => hero.id == heroId)
+
+    let damage = 0;
+    if(dice){
+      //DANNO DA ATTACCO SUBITO
+      damage = (dice-hero.curr_def)*multiplier
+      if(critical) damage *= 2
+      //INCREMENTO DI 1 LE FURIE SE NON HO SANGUINAMENTO
+      if(!hero.bleeding) this.props.heroFury(heroId,1)
+    }
+    else{
+      //DANNO DA VELENO E/O BRUCIATURA
+      if(burn)
+        damage = Math.ceil((hero.hp*10)/100)
+      if(poison)
+        damage += Math.ceil((hero.hp*15)/100)
+    }
+
+    if(damage > 0){
+      this.props.heroDamage(heroId,damage)
+    }
+  }
+
+  submitMana = (mp_using) => {
+    const heroId = this.props.navigation.getParam('heroId', 'NO-ID');
+    this.props.heroMana(heroId,mp_using)
+  }
+
+  submitHeal = (total_heal,hp_heal,mp_heal) => {
+    const heroId = this.props.navigation.getParam('heroId', 'NO-ID');
+    this.props.heroHeal({id:heroId,total_heal,hp_heal,mp_heal})
+  }
+
+  submitAltered = (poisoning,burning,bleeding) => {
+    const heroId = this.props.navigation.getParam('heroId', 'NO-ID');
+    this.props.heroAltered({id:heroId,poisoning,burning,bleeding})
+  }
+
+  submitFury = () => {
+    const heroId = this.props.navigation.getParam('heroId', 'NO-ID');
+    this.props.heroFury(heroId,-5)
+  }
+
+  submitBonusMalus = (bonus,malus,remove) => {
+    const heroId = this.props.navigation.getParam('heroId', 'NO-ID');
+    let value = 0
+    if(bonus) value = bonus
+    else if(malus) value -= malus
+    else value = 0
+    this.props.heroDefence(heroId,value)
+
+
+  }
+
+  submitAnimal = (animalId,animalLevel) => {
+    console.log(animalId,animalLevel)
+  }
+
   render() {
     const {navigation} = this.props;
     const {navigate} = navigation;
@@ -31,7 +150,7 @@ class HeroScreen extends React.Component {
     const hero = this.props.heroes.find(hero => hero.id == heroId)
     const hero_image = heroesList.heroes[heroId].image
     return (
-      <LeftRightBar navigation={this.props.navigation} editFunction={this.editFunction}>
+      <LeftRightBar navigation={this.props.navigation} editFunction={this.toggleEditHero} animalFunction={(heroId == 'hero-3') ? this.toggleAnimal : undefined}>
         <View style={{
           flex: 1,
           alignItems: 'center',
@@ -40,9 +159,8 @@ class HeroScreen extends React.Component {
           <View style={{
             flex: 4,
             width: '100%',
-            justifyContent: 'space-around',
+            justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: "rgba(0,0,0,0.5)",
             flexDirection: "row"
           }}>
             <View style={{
@@ -50,57 +168,40 @@ class HeroScreen extends React.Component {
               height: '80%',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: "rgba(255,0,0,0.5)"
+
             }}>
-              <View style={{
-                width: '100%',
-                height: '30%',
-                backgroundColor: "rgba(0,255,0,0.5)"
-              }} />
-              <View style={{
-                width: '100%',
-                height: '30%',
-                backgroundColor: "rgba(0,255,0,0.5)"
-              }} />
+            {/*HP, veleno e bruciatura*/}
+              <Health curr_hp={hero.curr_hp} hp={hero.hp} poisoning={hero.poisoning} burning={hero.burning}/>
+            {/*MP*/}
+              <Mana curr_mp={hero.curr_mp} mp={hero.mp} submitMana={this.submitMana}/>
             </View>
+
+
+            {/*Parte Centrale Superiore*/}
             <View style={{
-              width: '30%',
+              width: '20%',
               height: '90%',
               alignItems: 'center',
-              backgroundColor: "rgba(255,0,0,0.5)"
             }}>
               {/*Parte Centrale Superiore -- Immagine Eroe*/}
               <View style={{
                 width: '100%',
                 height: '70%',
-                backgroundColor: "rgba(0,255,0,0.5)",
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <Thumbnail  source={hero_image} style={{height:'100%',aspectRatio: 1, borderRadius: 999}}  large/>
+                <Thumbnail  source={hero_image} style={{height:'90%',aspectRatio: 1, borderRadius: 999}}/>
               </View>
-              <View style={{
-                width: '100%',
-                height: '30%',
-                backgroundColor: "rgba(0,0,255,0.5)",
-              }} />
+              {/*Parte Centrale Superiore -- Punti Furia e Sanguinamento*/}
+              <Fury fp={hero.fp} submitFury={this.submitFury} bleeding={hero.bleeding}/>
             </View>
-            <View style={{
-              width: '30%',
-              height: '80%',
-              justifyContent: 'flex-start',
-              backgroundColor: "rgba(255,0,0,0.5)"
-            }}>
-              <View style={{
-                width: '100%',
-                height: '30%',
-                backgroundColor: "rgba(0,255,0,0.5)"
-              }} />
-            </View>
+
+            {/*Difesa e malus sulla difesa*/}
+            <Defence curr_def={hero.curr_def} def={hero.def}/>
           </View>
 
-
-          {/*Parte Status Alterati*/}
+{/*
+          //Parte Status Alterati
           <View style={{
             flex: 2,
             width: '100%',
@@ -115,7 +216,7 @@ class HeroScreen extends React.Component {
               flexGrow: 0,
             }} />
           </View>
-
+*/}
 
           {/*Parte dei quattro bottoni*/}
           <View style={{
@@ -135,19 +236,29 @@ class HeroScreen extends React.Component {
                 width: '100%',
                 height: '30%',
               }}>
-                <Button block light
-                  onPress={() => console.log("DANNO")}>
+                <Button block light style = {{ elevation: 0 }}
+                  onPress={() => this.toggleDamageModal(!this.state.isDamageVisible)}>
                   <Text>Danno</Text>
                 </Button>
+                <DamagePopup submitDamage={this.submitDamage}
+                  toggleFunction={this.toggleDamageModal}
+                  isVisible={this.state.isDamageVisible}
+                  monster_multiplier={this.props.settings.monster_multiplier}
+                />
               </View>
               <View style={{
                 width: '100%',
                 height: '30%',
               }}>
-                <Button block light
-                  onPress={() => console.log("CURA")}>
+                <Button block light style = {{ elevation: 0 }}
+                  onPress={() => this.toggleHealModal(!this.state.isHealVisible)}>
                   <Text>Cura</Text>
                 </Button>
+                <HealPopup
+                  submitHeal={this.submitHeal}
+                  toggleFunction={this.toggleHealModal}
+                  isVisible={this.state.isHealVisible}
+                />
               </View>
             </View>
             <View style={{
@@ -160,23 +271,49 @@ class HeroScreen extends React.Component {
                 width: '100%',
                 height: '30%',
               }}>
-                <Button block light
-                  onPress={() => console.log("STATUS")}>
+                <Button block light style = {{ elevation: 0 }}
+                  onPress={() => this.toggleAlteredStatusModal(!this.state.isAlteredStatusVisible)}>
                   <Text>Status Alterati</Text>
                 </Button>
+                {this.state.isAlteredStatusVisible&& (
+                  <AlteredStatusPopup
+                    bleeding={hero.bleeding} poisoning={hero.poisoning} burning={hero.burning}
+                    submitAltered={this.submitAltered}
+                    toggleFunction={this.toggleAlteredStatusModal}
+                    isVisible={this.state.isAlteredStatusVisible}/>
+                )}
               </View>
               <View style={{
                 width: '100%',
                 height: '30%',
               }}>
-                <Button block light
-                  onPress={() => console.log("BONUS/MALUS")}>
+                <Button block light style = {{ elevation: 0 }}
+                  onPress={() => this.toggleBonusMalusModal(!this.state.isBonusMalusVisible)}>
                   <Text>Bonus/Malus</Text>
                 </Button>
+                <BonusMalusPopup
+                  submitBonusMalus={this.submitBonusMalus}
+                  toggleFunction={this.toggleBonusMalusModal}
+                  isVisible={this.state.isBonusMalusVisible}
+                />
               </View>
             </View>
           </View>
         </View>
+        { this.state.isEditHeroVisible &&(
+          <EditHeroPopup
+            heroHp={hero.hp.toString()} heroMp={hero.mp.toString()} heroDef={hero.def.toString()}
+            submitEditHero={this.submitEditHero}
+            toggleFunction={this.toggleEditHero}
+            isVisible={this.state.isEditHeroVisible}
+          />
+        )}
+        <AddAnimalPopup
+          submitAnimal={this.submitAnimal}
+          toggleFunction={this.toggleAnimal}
+          isVisible={this.state.isAnimalVisible}
+        />
+
       </LeftRightBar>
     );
   }

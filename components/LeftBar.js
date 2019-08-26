@@ -3,7 +3,9 @@ import {View, ScrollView,TouchableOpacity} from 'react-native';
 import {Avatar, Icon, Badge} from 'react-native-elements'
 import {Text,Thumbnail, Button} from 'native-base'
 import {connect} from "react-redux";
-import heroesList from '../pages/AddEntityComponent/heroes-list'
+import heroesList from './heroes-list'
+import monstersList from './monsters-list'
+import animalsList from './animals-list'
 //import monstersList from '../pages/AddEntityComponent/monsters-list'
 
 const mapStateToProps = state => {

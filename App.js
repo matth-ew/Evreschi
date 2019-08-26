@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar} from 'react-native';
-import { AppLoading } from 'expo';
+import { StyleSheet, Text, View, StatusBar, BackHandler, Alert} from 'react-native';
+import { AppLoading, ScreenOrientation } from 'expo';
 
 import HomeScreen from "./pages/HomeScreen"
 import MainScreen from "./pages/MainScreen"
@@ -16,7 +16,7 @@ import rootReducer from "./redux/reducers/reducer";
 import {createStackNavigator, createSwitchNavigator, createAppContainer, StackActions, NavigationActions} from 'react-navigation';
 import { useScreens } from 'react-native-screens';
 import * as Font from 'expo-font';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const store = createStore(rootReducer);
 
@@ -75,7 +75,7 @@ let Navigator = createSwitchNavigator({
   Monster: {screen: MonsterNavigator},
   AddEntity: {screen: AddEntityNavigator}
 }, {
-    initialRouteName: 'Home',
+    initialRouteName: 'Main',
     animationEnabled: false,
     swipeEnabled: false,
     headerMode: 'none',
@@ -100,9 +100,32 @@ class App extends React.Component {
       Roboto: require('native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       ...Ionicons.font,
+      ...MaterialCommunityIcons.font,
     });
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     this.setState({ isReady: true });
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  handleBackButton = () => {
+      Alert.alert(
+        'Uscita',
+        'Sei sicuro di voler uscire?',
+        [
+          {
+            text: 'Annulla',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => BackHandler.exitApp()},
+        ],
+      );
+      return true;
+  };
 
   render() {
     if (!this.state.isReady) {

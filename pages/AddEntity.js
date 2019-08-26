@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View} from 'react-native';
 import {Button,Text,H3,Container} from 'native-base'
 import LeftRightBar from '../components/LeftRightBar'
+import {styles} from '../components/Styles'
 
 class AddEntity extends React.Component {
   constructor(props) {
@@ -39,26 +40,5 @@ class AddEntity extends React.Component {
     );
   }
 }
-
-export const styles = StyleSheet.create({
-  overlayBackground: {
-    position: "absolute",
-    width: '100%',
-    height: '100%',
-    zIndex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)"
-  },
-  overlay: {
-    position: "absolute",
-    top: '25%',
-    right: '25%',
-    bottom: '25%',
-    left: '25%',
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-    zIndex: 2
-  }
-});
 
 export default AddEntity;

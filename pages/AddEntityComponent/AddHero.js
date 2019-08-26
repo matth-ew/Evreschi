@@ -4,7 +4,7 @@ import {Button,Icon} from 'react-native-elements'
 import {Thumbnail,Text} from 'native-base'
 import LeftRightBar from '../../components/LeftRightBar'
 import AddHeroStats from './AddHeroStats'
-import heroesList from './heroes-list'
+import heroesList from '../../components/heroes-list'
 import {connect} from "react-redux";
 import {addHero} from '../../redux/actions/act-heroes'
 
@@ -66,7 +66,7 @@ class AddHero extends React.PureComponent {
         </View>
 
         {/*Modal*/}
-        <AddHeroStats isVisible={this.state.isVisible} toggleModal={this.toggleModal} createHero={(heroHp,heroMp,heroDef) => this.createHero(this.state.heroId,heroHp,heroMp,heroDef)}/>
+        <AddHeroStats isVisible={this.state.isVisible} toggleFunction={this.toggleModal} createHero={(heroHp,heroMp,heroDef) => this.createHero(this.state.heroId,heroHp,heroMp,heroDef)}/>
         {/*Bottone Home*/}
           <Button
             icon={

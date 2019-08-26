@@ -1,12 +1,12 @@
-import arciere from '../../assets/monsteres/arciere.jpg'
-import druido from '../../assets/monsteres/druido.jpg'
-import ranger from '../../assets/monsteres/ranger.jpg'
-import berserker from '../../assets/monsteres/berserker.jpg'
-import cavaliere from '../../assets/monsteres/cavaliere.jpg'
-import tanker from '../../assets/monsteres/tanker.jpg'
-import sciamano from '../../assets/monsteres/sciamano.jpg'
-import mistico from '../../assets/monsteres/mistico.jpg'
-import negromante from '../../assets/monsteres/negromante.jpg'
+import arciere from '../assets/heroes/arciere.jpg'
+import druido from '../assets/heroes/druido.jpg'
+import ranger from '../assets/heroes/ranger.jpg'
+import berserker from '../assets/heroes/berserker.jpg'
+import cavaliere from '../assets/heroes/cavaliere.jpg'
+import tanker from '../assets/heroes/tanker.jpg'
+import sciamano from '../assets/heroes/sciamano.jpg'
+import mistico from '../assets/heroes/mistico.jpg'
+import negromante from '../assets/heroes/negromante.jpg'
 
 const monstersList = {
   monsteres:{

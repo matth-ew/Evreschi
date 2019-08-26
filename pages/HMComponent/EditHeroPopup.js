@@ -3,34 +3,30 @@ import {View} from 'react-native';
 import {Icon,Input,Item,Form} from 'native-base'
 import Popup from '../../components/Popup'
 
-class AddHeroStats extends React.PureComponent {
+class EditHeroPopup extends React.PureComponent {
 
   constructor (props) {
     super(props)
     this.state = {
-      heroHp: null,
-      heroMp: null,
-      heroDef: null
+      heroHp: '',
+      heroMp: '',
+      heroDef: ''
     }
   }
 
   submitFunction = () => {
     const {heroHp,heroMp,heroDef} = this.state
-    this.props.createHero(heroHp,heroMp,heroDef);
-    this.resetStats();
+    this.props.submitEditHero(heroHp,heroMp,heroDef);
   }
 
-  cancelFunction = () => {
-    this.resetStats();
-  }
-
-  resetStats = () => {
+  componentDidMount() {
     this.setState({
-      heroHp: null,
-      heroMp: null,
-      heroDef: null
+      heroHp: this.props.heroHp,
+      heroMp: this.props.heroMp,
+      heroDef: this.props.heroDef
     })
   }
+
   hpHandler = (val) => {
     const newVal =val.replace(/[^0-9]/g, "");
     this.setState({heroHp:newVal})
@@ -45,19 +41,20 @@ class AddHeroStats extends React.PureComponent {
   }
 
   render() {
-    let isDisabled = (!this.state.heroHp || !this.state.heroMp || !this.state.heroDef)
+    const {heroHp,heroMp,heroDef} = this.state
+    const isDisabled = (!this.state.heroHp || !this.state.heroMp || !this.state.heroDef)
     return(
       <Popup
         isDisabled={isDisabled}
         isVisible={this.props.isVisible}
         submitFunction={this.submitFunction}
         cancelFunction={this.cancelFunction}
-        toggleFunction={this.props.toggleFunction}
-        submitText="Crea" backText="Annulla">
+        toggleFunction={this.props.toggleFunction}>
         <Form>
             <Item>
               <Icon active name="heart" type='MaterialCommunityIcons' style={{color:"red"}} />
-              <Input placeholder="Punti Vita" keyboardType={'numeric'} value={this.state.heroHp} onChangeText={this.hpHandler}/>
+              <Input allowFontScaling={true} numberOfLines={1} placeholder="Punti Vita" keyboardType={'numeric'} value={heroHp} onChangeText={this.hpHandler}/>
+
             </Item>
             <Item>
               <Icon active name="water" type='MaterialCommunityIcons' style={{color:"yellow"}} />
@@ -74,4 +71,4 @@ class AddHeroStats extends React.PureComponent {
 }
 
 
-export default AddHeroStats;
+export default EditHeroPopup;

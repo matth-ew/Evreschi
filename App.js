@@ -8,25 +8,20 @@ import AddEntity from "./pages/AddEntity"
 import AddMonster from "./pages/AddEntityComponent/AddMonster"
 import AddHero from "./pages/AddEntityComponent/AddHero"
 import HeroScreen from "./pages/HeroScreen"
+import AnimalScreen from "./pages/AnimalScreen"
 import MonsterScreen from "./pages/MonsterScreen"
-
-import { createStore } from "redux";
 import { Provider } from "react-redux"
-import rootReducer from "./redux/reducers/reducer";
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './redux/store/store';
 import {createStackNavigator, createSwitchNavigator, createAppContainer, StackActions, NavigationActions} from 'react-navigation';
 import { useScreens } from 'react-native-screens';
 import * as Font from 'expo-font';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-const store = createStore(rootReducer);
-
-
 useScreens();
-
+/*
 const HeroNavigator = createSwitchNavigator({
   HeroScreen: {screen: HeroScreen},
-  /*AddHero: {screen: AddHero},
-  AddMonster: {screen: AddMonster}*/
 }, {
     initialRouteName: 'HeroScreen',
     animationEnabled: false,
@@ -39,8 +34,6 @@ const HeroNavigator = createSwitchNavigator({
 
 const MonsterNavigator = createSwitchNavigator({
   MonsterScreen: {screen: MonsterScreen},
-  /*AddHero: {screen: AddHero},
-  AddMonster: {screen: AddMonster}*/
 }, {
     initialRouteName: 'MonsterScreen',
     animationEnabled: false,
@@ -50,7 +43,7 @@ const MonsterNavigator = createSwitchNavigator({
       headerVisible: false,
     }
 });
-
+*/
 const AddEntityNavigator = createSwitchNavigator({
   AddEntity: {screen: AddEntity},
   AddHero: {screen: AddHero},
@@ -71,11 +64,13 @@ const AddEntityNavigator = createSwitchNavigator({
 let Navigator = createSwitchNavigator({
   Home: {screen: HomeScreen},
   Main: {screen: MainScreen},
-  Hero: {screen: HeroNavigator},
-  Monster: {screen: MonsterNavigator},
+  Hero: {screen: HeroScreen},
+  Animal: {screen: AnimalScreen},
+  Monster: {screen: MonsterScreen},
   AddEntity: {screen: AddEntityNavigator}
 }, {
-    initialRouteName: 'Main',
+    //initialRouteName: 'Home',
+    initialRouteName: 'Home',
     animationEnabled: false,
     swipeEnabled: false,
     headerMode: 'none',
@@ -133,8 +128,10 @@ class App extends React.Component {
     }
     return(
       <Provider store={ store }>
-      <StatusBar hidden={true} />
-        <Navigation/>
+        <PersistGate loading={null} persistor={persistor}>
+          <StatusBar hidden={true} />
+          <Navigation/>
+        </PersistGate>
       </Provider>
     )
   }

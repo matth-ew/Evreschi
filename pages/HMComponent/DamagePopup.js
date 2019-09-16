@@ -47,10 +47,7 @@ class DamagePopup extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.setState({multiplier: this.props.monster_multiplier[0]})
-  }
-  componentDidUpdate(prevProps) {
-    if(prevProps.monster_multiplier !== this.props.monster_multiplier){
+    if(this.props.monster_multiplier){
       this.setState({multiplier: this.props.monster_multiplier[0]})
     }
   }
@@ -72,17 +69,19 @@ class DamagePopup extends React.PureComponent {
               <Icon active name="dice-multiple" type='MaterialCommunityIcons' style={{color:"black",flex:1}} />
               <Input style={{fontSize: 13,flex:3}} allowFontScaling={true} numberOfLines={1} placeholder="Risultato Dadi" keyboardType={'numeric'} value={dice} onChangeText={this.diceHandler}/>
             </View>
-            <View style={{flex:1,flexDirection: 'row', alignItems:'center'}}>
-              <Text style={{flex:1,fontSize: 15}} allowFontScaling={true} numberOfLines={1}>Moltiplicatore</Text>
-              <Picker key={"multiplier"}
-                selectedValue={multiplier}
-                style={{ flex:1, width: undefined }}
-                onValueChange={ itemValue =>
-                  this.setState({multiplier: itemValue})
-                }>
-                {this.itemPicker(this.props.monster_multiplier)}
-              </Picker>
-            </View>
+            {this.props.monster_multiplier && (
+              <View style={{flex:1,flexDirection: 'row', alignItems:'center'}}>
+                <Text style={{flex:1,fontSize: 15}} allowFontScaling={true} numberOfLines={1}>Moltiplicatore</Text>
+                <Picker key={"multiplier"}
+                  selectedValue={multiplier}
+                  style={{ flex:1, width: undefined }}
+                  onValueChange={ itemValue =>
+                    this.setState({multiplier: itemValue})
+                  }>
+                  {this.itemPicker(this.props.monster_multiplier)}
+                </Picker>
+              </View>
+            )}
           </Item>
             <ListItem button onPress={() => this.setState({critical:!critical})}>
               <CheckBox color="grey" checked={critical} onPress={() => this.setState({critical:!critical})}/>
@@ -90,17 +89,21 @@ class DamagePopup extends React.PureComponent {
                 <Text>Critico</Text>
               </Body>
             </ListItem>
-          <ListItem itemDivider/>
-          <ListItem>
-            <CheckBox color="grey" checked={poison} onPress={() => this.setState({poison:!poison})} />
-            <Body>
-              <Text>Veleno</Text>
-            </Body>
-            <CheckBox color="grey" checked={burn} onPress={() => this.setState({burn:!burn})} />
-            <Body>
-              <Text>Bruciatura</Text>
-            </Body>
-          </ListItem>
+          {this.props.poison_burning && (
+            <View>
+              <ListItem itemDivider/>
+              <ListItem>
+                  <CheckBox color="grey" checked={poison} onPress={() => this.setState({poison:!poison})} />
+                  <Body>
+                    <Text>Veleno</Text>
+                  </Body>
+                  <CheckBox color="grey" checked={burn} onPress={() => this.setState({burn:!burn})} />
+                  <Body>
+                    <Text>Bruciatura</Text>
+                  </Body>
+              </ListItem>
+            </View>
+          )}
         </Form>
       </Popup>
     );

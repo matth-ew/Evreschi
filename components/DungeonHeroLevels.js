@@ -4,6 +4,7 @@ import {Button, Header, Avatar, Icon} from 'react-native-elements'
 import {Picker, Form, Item,Text} from 'native-base'
 import produce from 'immer';
 import Popup from './Popup'
+import monstersList from './monsters-list'
 import {connect} from "react-redux";
 import {setLevels} from '../redux/actions/act-settings'
 
@@ -34,6 +35,7 @@ class DungeonHeroLevels extends React.PureComponent {
         dungeon_level: this.props.settings.dungeon_level,
       })
   }
+  /*
   componentDidUpdate(prevProps) {
       if(prevProps.settings !== this.props.settings){
         this.setState({
@@ -41,7 +43,7 @@ class DungeonHeroLevels extends React.PureComponent {
           dungeon_level: this.props.settings.dungeon_level,
         })
       }
-  }
+  }*/
 
   levelPicker = (id,max) => {
     var pickerItems=[];
@@ -49,6 +51,17 @@ class DungeonHeroLevels extends React.PureComponent {
       pickerItems.push(<Picker.Item key = {id||i} label={i.toString()} value={i} />)
     return pickerItems;
   }
+
+  dungeonPicker = () => {
+    var pickerItems=[];
+    monstersList.dungeonsIds.forEach((dungeonId,i) => {
+      const {id,label} = monstersList.dungeons[dungeonId]
+      pickerItems.push(<Picker.Item key = {"dungeon"||i} label={label} value={id} />)
+    })
+
+    return pickerItems;
+  }
+
   submitFunction = () => {
     this.props.setLevels(this.state)
   }
@@ -91,7 +104,7 @@ class DungeonHeroLevels extends React.PureComponent {
                   draft.dungeon_level = itemValue
                 }))}>
               <Picker.Item label="Seleziona il livello" value={null}/>
-              {this.levelPicker("dungeon",12)}
+              {this.dungeonPicker()}
             </Picker>
           </Item>
         </Form>

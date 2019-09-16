@@ -48,7 +48,7 @@ class Popup extends React.PureComponent {
             backgroundColor: "white",
           }}>
 
-            <View style={{flex:3, width: '100%'}}>
+            <View style={{flex: (this.props.flex? this.props.flex : 3), width: '100%'}}>
               {this.props.children}
             </View>
 

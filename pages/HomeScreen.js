@@ -2,9 +2,31 @@ import React from 'react';
 import {ImageBackground, StyleSheet} from 'react-native';
 import {Button,Text,H1, View} from 'native-base'
 import background from '../assets/background.jpg'
+import {connect} from "react-redux";
+import {resetHeroes} from '../redux/actions/act-heroes'
+import {resetMonsters} from '../redux/actions/act-monsters'
+import {resetAnimals} from '../redux/actions/act-animals'
+import {resetSettings} from '../redux/actions/act-settings'
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+    resetHeroes: () => dispatch(resetHeroes()),
+    resetMonsters: () => dispatch(resetMonsters()),
+    resetAnimals: () => dispatch(resetAnimals()),
+    resetSettings: () => dispatch(resetSettings()),
+  };
+};
 
 
 class HomeScreen extends React.Component {
+
+  newGame = () => {
+    this.props.resetHeroes();
+    this.props.resetMonsters();
+    this.props.resetAnimals();
+    this.props.resetSettings();
+  }
 
   render() {
     const {navigate} = this.props.navigation;
@@ -20,10 +42,10 @@ class HomeScreen extends React.Component {
                 justifyContent: 'space-around',
                 width: '100%'
               }}>
-                <Button primary onPress={() => {navigate('Main', {mod: 'New'})}}>
+                <Button primary onPress={() => {this.newGame();navigate('Main')}}>
                   <Text>Nuova Partita</Text>
                 </Button>
-                <Button success onPress={() => {navigate('Main', {mod: 'Load'})}}>
+                <Button success onPress={() => {navigate('Main')}}>
                   <Text>Carica</Text>
                 </Button>
               </View>
@@ -59,4 +81,4 @@ export const styles = StyleSheet.create({
 
 
 
-export default HomeScreen;
+export default connect(null,mapDispatchToProps)(HomeScreen);

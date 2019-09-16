@@ -53,12 +53,14 @@ class HealPopup extends React.PureComponent {
         <Form>
           <Item>
             <Icon active name="beaker" style={{color:"red"}} />
-            <Input allowFontScaling={true} numberOfLines={1} placeholder="Cura Punti Vita" keyboardType={'numeric'} value={hp_heal} onChangeText={this.hpHealHandler}/>
+            <Input allowFontScaling={true} numberOfLines={1} placeholder="Punti Vita" keyboardType={'numeric'} value={hp_heal} onChangeText={this.hpHealHandler}/>
           </Item>
-          <Item>
-            <Icon active name="beaker" style={{color:"#faad14"}} />
-            <Input allowFontScaling={true} numberOfLines={1} placeholder="Cura Mana" keyboardType={'numeric'} value={mp_heal} onChangeText={this.mpHealHandler}/>
-          </Item>
+          {this.props.mana && (
+            <Item>
+              <Icon active name="beaker" style={{color:"#faad14"}} />
+              <Input allowFontScaling={true} numberOfLines={1} placeholder="Punti Mana" keyboardType={'numeric'} value={mp_heal} onChangeText={this.mpHealHandler}/>
+            </Item>
+          )}
           <ListItem button onPress={() => this.setState({total_heal:!total_heal})}>
             <CheckBox color="grey" checked={total_heal} onPress={() => this.setState({total_heal:!total_heal})}/>
             <Body>

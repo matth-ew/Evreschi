@@ -47,8 +47,9 @@ class RightBar extends React.PureComponent {
               onPress={() => this.toggleModal(!this.state.isVisible)}
         />
         {/*Selezione Livello eroi e Livello Dungeon*/}
-        <DungeonHeroLevels isVisible={this.state.isVisible} toggleFunction={this.toggleModal}/>
-
+        {this.state.isVisible && (
+          <DungeonHeroLevels isVisible={this.state.isVisible} toggleFunction={this.toggleModal}/>
+        )}
         {this.props.animalFunction && (
           <Icon raised
               name='dog-side'
@@ -68,7 +69,7 @@ class RightBar extends React.PureComponent {
               style={{alignSelf:'flex-end'}}
               onPress={() => this.handleEdit()}
         />)}
-        {this.props.cancelFunction && (
+        {this.props.deleteFunction && (
           <Icon raised
               name='close-circle'
               color='grey'

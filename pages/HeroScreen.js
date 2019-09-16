@@ -14,7 +14,8 @@ import AlteredStatusPopup from './HMComponent/AlteredStatusPopup'
 import BonusMalusPopup from './HMComponent/BonusMalusPopup'
 import EditHeroPopup from './HMComponent/EditHeroPopup'
 import AddAnimalPopup from './HMComponent/AddAnimalPopup'
-import {changeHero,heroDamage,heroMana,heroHeal,heroFury,heroDefence,heroAltered} from '../redux/actions/act-heroes'
+import DeletePopup from './HMComponent/DeletePopup'
+import {changeHero,deleteHero,heroDamage,heroMana,heroHeal,heroFury,heroDefence,heroAltered} from '../redux/actions/act-heroes'
 
 const mapStateToProps = state => {
   return {
@@ -26,6 +27,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     changeHero: hero => dispatch(changeHero(hero)),
+    deleteHero: id => dispatch(deleteHero(id)),
     heroDamage: (id,damage) => dispatch(heroDamage(id,damage)),
     heroMana: (id,value) => dispatch(heroMana(id,value)),
     heroHeal: (hero_heal) => dispatch(heroHeal(hero_heal)),
@@ -46,6 +48,7 @@ class HeroScreen extends React.Component {
       isBonusMalusVisible: false,
       isEditHeroVisible: false,
       isAnimalVisible: false,
+      isDeleteHeroVisible: false,
     }
   }
 
@@ -67,6 +70,13 @@ class HeroScreen extends React.Component {
   toggleEditHero = () => {
     this.setState(prevState => ({
         isEditHeroVisible: !prevState.isEditHeroVisible
+      })
+    )
+  }
+
+  toggleDeleteHero = () => {
+    this.setState(prevState => ({
+        isDeleteHeroVisible: !prevState.isDeleteHeroVisible
       })
     )
   }
@@ -108,6 +118,13 @@ class HeroScreen extends React.Component {
     }
   }
 
+  deleteHero = () => {
+    const {navigate} = this.props.navigation;
+    const heroId = this.props.navigation.getParam('heroId', 'NO-ID');
+    navigate('Main');
+    this.props.deleteHero(heroId);
+  }
+
   submitMana = (mp_using) => {
     const heroId = this.props.navigation.getParam('heroId', 'NO-ID');
     this.props.heroMana(heroId,mp_using)
@@ -139,10 +156,6 @@ class HeroScreen extends React.Component {
 
   }
 
-  submitAnimal = (animalId,animalLevel) => {
-    console.log(animalId,animalLevel)
-  }
-
   render() {
     const {navigation} = this.props;
     const {navigate} = navigation;
@@ -150,7 +163,7 @@ class HeroScreen extends React.Component {
     const hero = this.props.heroes.find(hero => hero.id == heroId)
     const hero_image = heroesList.heroes[heroId].image
     return (
-      <LeftRightBar navigation={this.props.navigation} editFunction={this.toggleEditHero} animalFunction={(heroId == 'hero-3') ? this.toggleAnimal : undefined}>
+      <LeftRightBar navigation={this.props.navigation} editFunction={this.toggleEditHero} deleteFunction={this.toggleDeleteHero} animalFunction={(heroId == 'hero-3') ? this.toggleAnimal : undefined}>
         <View style={{
           flex: 1,
           alignItems: 'center',
@@ -240,11 +253,14 @@ class HeroScreen extends React.Component {
                   onPress={() => this.toggleDamageModal(!this.state.isDamageVisible)}>
                   <Text>Danno</Text>
                 </Button>
+              { this.state.isDamageVisible && (
                 <DamagePopup submitDamage={this.submitDamage}
                   toggleFunction={this.toggleDamageModal}
                   isVisible={this.state.isDamageVisible}
                   monster_multiplier={this.props.settings.monster_multiplier}
+                  poison_burning
                 />
+              )}
               </View>
               <View style={{
                 width: '100%',
@@ -258,6 +274,7 @@ class HeroScreen extends React.Component {
                   submitHeal={this.submitHeal}
                   toggleFunction={this.toggleHealModal}
                   isVisible={this.state.isHealVisible}
+                  mana
                 />
               </View>
             </View>
@@ -308,8 +325,14 @@ class HeroScreen extends React.Component {
             isVisible={this.state.isEditHeroVisible}
           />
         )}
+        { this.state.isDeleteHeroVisible &&(
+          <DeletePopup
+            submitFunction={this.deleteHero}
+            toggleFunction={this.toggleDeleteHero}
+            isVisible={this.state.isDeleteHeroVisible}
+          />
+        )}
         <AddAnimalPopup
-          submitAnimal={this.submitAnimal}
           toggleFunction={this.toggleAnimal}
           isVisible={this.state.isAnimalVisible}
         />

@@ -41,7 +41,9 @@ class AlteredStatusPopup extends React.PureComponent {
 
   componentDidMount() {
     const {poisoning,burning,bleeding} = this.props
-    const remove = ((poisoning&&burning&&bleeding) ? true : false)
+    let remove;
+    if(this.props.bleeding != undefined) remove = ((poisoning&&burning&&bleeding) ? true : false)
+    else remove = ((poisoning&&burning) ? true : false)
     this.setState({
       poisoning,
       burning,
@@ -79,12 +81,14 @@ class AlteredStatusPopup extends React.PureComponent {
             </Body>
             <CheckBox color="grey" checked={burning} onPress={() => this.setState({burning:!burning})}/>
           </ListItem>
-          <ListItem button onPress={() => this.setState({bleeding:!bleeding})}>
-            <Body>
-              <Text>Sanguinamento</Text>
-            </Body>
-            <CheckBox color="grey" checked={bleeding} onPress={() => this.setState({bleeding:!bleeding})}/>
-          </ListItem>
+          {this.props.bleeding != undefined && (
+            <ListItem button onPress={() => this.setState({bleeding:!bleeding})}>
+              <Body>
+                <Text>Sanguinamento</Text>
+              </Body>
+              <CheckBox color="grey" checked={bleeding} onPress={() => this.setState({bleeding:!bleeding})}/>
+            </ListItem>
+          )}
         </Form>
       </Popup>
     );

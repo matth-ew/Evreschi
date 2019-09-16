@@ -2,24 +2,26 @@ import produce, { applyPatches } from "immer";
 import {
   ADD_HERO,
   CHANGE_HERO,
+  DELETE_HERO,
   DAMAGE,
   MANA,
   HEAL,
   FURY,
   DEFENCE,
   ALTERED,
+  RESET,
 } from "../constants/const-heroes";
 
 //STANDARD
-//let defaultState = []
+let defaultState = []
 
 
 //TEST
-let defaultState = [
+/*let defaultState = [
   {id: 'hero-3',hp:15,mp:7,fp:5,curr_hp:10,curr_mp:4,def:3, curr_def: 6,poisoning: true,burning:true,bleeding:false},
   {id: 'hero-6',hp:30,mp:5,fp:0,curr_hp:30,curr_mp:5,def:6,curr_def:4,poisoning: true,burning:false,bleeding:true},
   {id: 'hero-9',hp:13,mp:15,fp:0,curr_hp:13,curr_mp:15,def:2,curr_def:2,poisoning: false,burning:true,bleeding:false},
-];
+];*/
 
 const heroes = (state = defaultState, action) =>
   produce(state, draft =>{
@@ -53,6 +55,12 @@ const heroes = (state = defaultState, action) =>
         draft[i].bleeding= false;
         }
       });
+      return
+    case DELETE_HERO:
+      let index = state.findIndex(x => x.id == action.id)
+      if(index != -1){
+        draft.splice(index,1)
+      }
       return
     case DAMAGE:
       draft.forEach((hero,i) => {
@@ -118,6 +126,8 @@ const heroes = (state = defaultState, action) =>
         }
       });
       return
+    case RESET:
+      return defaultState
   }
 });
 

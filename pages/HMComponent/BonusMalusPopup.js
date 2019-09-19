@@ -60,20 +60,20 @@ class BonusMalusPopup extends React.PureComponent {
         submitFunction={this.submitFunction}
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
-        height="60%">
-          <Text>Specificare il bonus o il malus della difesa</Text>
-          <Form>
-            <Item>
+        height="60%" flex={4}>
+          <Form style={{flex:1}}>
+            <Text>Specificare il bonus o il malus della difesa</Text>
+            <Item style={{flex:1}}>
               <Icon active name="plus" type='MaterialCommunityIcons' style={{color:"green"}} />
               <Icon name='shield' type='MaterialCommunityIcons' style={{color:"green"}}/>
               <Input allowFontScaling={true} numberOfLines={1} placeholder="Bonus" keyboardType={'numeric'} value={bonus} onChangeText={this.bonusHandler}/>
             </Item>
-            <Item>
+            <Item style={{flex:1}}>
               <Icon active name="minus" type='MaterialCommunityIcons' style={{color:"red"}} />
               <Icon name='shield' type='MaterialCommunityIcons' style={{color:"red"}}/>
               <Input allowFontScaling={true} numberOfLines={1} placeholder="Malus" keyboardType={'numeric'} value={malus} onChangeText={this.malusHandler}/>
             </Item>
-            <ListItem button onPress={() => this.setState({remove:!remove})}>
+            <ListItem style={{flex:1}} button onPress={() => this.setState({remove:!remove})}>
               <CheckBox color="grey" checked={remove} onPress={() => this.removeHandler(!remove)}/>
               <Body>
                 <Text>Rimuovi bonus/malus</Text>

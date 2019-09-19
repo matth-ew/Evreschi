@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.evreschi"
+    },
+    "android": {
+      "package": "com.evreschi"
     }
   }
 }

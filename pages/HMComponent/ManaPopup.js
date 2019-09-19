@@ -44,8 +44,8 @@ class ManaPopup extends React.PureComponent {
         toggleFunction={this.props.toggleFunction}
         height="30%" width="40%">
         <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          <H3>Quanti punti mana usi?</H3>
-          <Item>
+          <H3 style={{flex:1}}>Quanti punti mana usi?</H3>
+          <Item style={{flex:1}}>
             <Icon active name="beaker" style={{color:"#faad14"}} />
             <Input allowFontScaling={true} numberOfLines={1} placeholder="Punti Mana" keyboardType={'numeric'} value={mp_using} onChangeText={this.mpHandler}/>
           </Item>

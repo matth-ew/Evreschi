@@ -53,17 +53,17 @@ class AddHeroStats extends React.PureComponent {
         submitFunction={this.submitFunction}
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
-        submitText="Crea" backText="Annulla">
-        <Form>
-            <Item>
+        submitText="Crea" backText="Annulla" flex={3}>
+        <Form style={{flex:1}}>
+            <Item style={{flex:1}}>
               <Icon active name="heart" type='MaterialCommunityIcons' style={{color:"red"}} />
               <Input placeholder="Punti Vita" keyboardType={'numeric'} value={this.state.heroHp} onChangeText={this.hpHandler}/>
             </Item>
-            <Item>
+            <Item style={{flex:1}}>
               <Icon active name="water" type='MaterialCommunityIcons' style={{color:"yellow"}} />
               <Input placeholder="Punti Mana" keyboardType={'numeric'} value={this.state.heroMp} onChangeText={this.mpHandler}/>
             </Item>
-            <Item>
+            <Item style={{flex:1}}>
               <Icon active name="shield" type='MaterialCommunityIcons' style={{color:"black"}} />
               <Input placeholder="Difesa" keyboardType={'numeric'} value={this.state.heroDef} onChangeText={this.defHandler}/>
             </Item>

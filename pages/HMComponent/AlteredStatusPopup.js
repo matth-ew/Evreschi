@@ -59,30 +59,30 @@ class AlteredStatusPopup extends React.PureComponent {
         isVisible={this.props.isVisible}
         submitFunction={this.submitFunction}
         toggleFunction={this.props.toggleFunction}
-        height="70%">
-        <Form>
-          <ListItem button onPress={this.resetStats}>
+        height="60%" flex={4}>
+        <Form style={{flex:1}}>
+          <ListItem button onPress={this.resetStats} style={{flex:1}}>
             <Body>
               <Text>Seleziona/Deseleziona tutto</Text>
             </Body>
             <CheckBox color="grey" checked={remove} onPress={() => this.toggleAll(!remove)}/>
           </ListItem>
-          <ListItem itemDivider/>
+          <ListItem style={{flex:1}} itemDivider/>
 
-          <ListItem button onPress={() => this.setState({poisoning:!poisoning})}>
+          <ListItem style={{flex:1}} button onPress={() => this.setState({poisoning:!poisoning})}>
             <Body>
               <Text>Veleno</Text>
             </Body>
             <CheckBox color="grey" checked={poisoning} onPress={() => this.setState({poisoning:!poisoning})}/>
           </ListItem>
-          <ListItem button onPress={() => this.setState({burning:!burning})}>
+          <ListItem style={{flex:1}} button onPress={() => this.setState({burning:!burning})}>
             <Body>
               <Text>Bruciatura</Text>
             </Body>
             <CheckBox color="grey" checked={burning} onPress={() => this.setState({burning:!burning})}/>
           </ListItem>
           {this.props.bleeding != undefined && (
-            <ListItem button onPress={() => this.setState({bleeding:!bleeding})}>
+            <ListItem style={{flex:1}} button onPress={() => this.setState({bleeding:!bleeding})}>
               <Body>
                 <Text>Sanguinamento</Text>
               </Body>

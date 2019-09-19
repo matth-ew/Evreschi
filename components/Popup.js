@@ -12,6 +12,7 @@ class Popup extends React.PureComponent {
     isDisabled: false,
     submitText: 'Conferma',
     backText: 'Annulla',
+    flex: 3,
   }
 
   constructor (props) {
@@ -48,7 +49,7 @@ class Popup extends React.PureComponent {
             backgroundColor: "white",
           }}>
 
-            <View style={{flex: (this.props.flex? this.props.flex : 3), width: '100%'}}>
+            <View style={{flex: this.props.flex, width: '100%'}}>
               {this.props.children}
             </View>
 

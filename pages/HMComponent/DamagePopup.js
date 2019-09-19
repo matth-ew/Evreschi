@@ -62,9 +62,9 @@ class DamagePopup extends React.PureComponent {
         submitFunction={this.submitFunction}
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
-        height='60%' width='60%'>
+        height='60%' width='60%' flex={4}>
         <Form style={{flex: 1}}>
-          <Item>
+          <Item style={{flex:1}}>
             <View style={{flex:1,flexDirection: 'row', alignItems:'center'}}>
               <Icon active name="dice-multiple" type='MaterialCommunityIcons' style={{color:"black",flex:1}} />
               <Input style={{fontSize: 13,flex:3}} allowFontScaling={true} numberOfLines={1} placeholder="Risultato Dadi" keyboardType={'numeric'} value={dice} onChangeText={this.diceHandler}/>
@@ -83,16 +83,16 @@ class DamagePopup extends React.PureComponent {
               </View>
             )}
           </Item>
-            <ListItem button onPress={() => this.setState({critical:!critical})}>
-              <CheckBox color="grey" checked={critical} onPress={() => this.setState({critical:!critical})}/>
-              <Body>
-                <Text>Critico</Text>
-              </Body>
-            </ListItem>
+          <ListItem style={{flex:1}} button onPress={() => this.setState({critical:!critical})}>
+            <CheckBox color="grey" checked={critical} onPress={() => this.setState({critical:!critical})}/>
+            <Body>
+              <Text>Critico</Text>
+            </Body>
+          </ListItem>
           {this.props.poison_burning && (
-            <View>
-              <ListItem itemDivider/>
-              <ListItem>
+            <View style={{flex:1}}>
+              <ListItem  style={{flex:1}} itemDivider/>
+              <ListItem style={{flex:2}}>
                   <CheckBox color="grey" checked={poison} onPress={() => this.setState({poison:!poison})} />
                   <Body>
                     <Text>Veleno</Text>

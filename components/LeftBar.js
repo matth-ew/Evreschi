@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, ScrollView,TouchableOpacity} from 'react-native';
-import {Avatar, Icon, Badge} from 'react-native-elements'
-import {Text,Thumbnail, Button} from 'native-base'
+import {Avatar, Badge} from 'react-native-elements'
+import {Text,Thumbnail, Button, Icon} from 'native-base'
 import {connect} from "react-redux";
 import heroesList from './heroes-list'
 import monstersList from './monsters-list'
@@ -26,7 +26,13 @@ class LeftBar extends React.PureComponent {
       return (
         <TouchableOpacity key={hero.id} activeOpacity={0.7} style={{alignItems:'center', marginVertical:3}} onPress={() => {navigate('Hero',{heroId:hero.id})}}>
           <Thumbnail source={hero_image} />
-          <Badge status="error" value={hero.curr_hp} containerStyle={{ position: 'absolute', bottom: 0, left: 0 }} textStyle={{fontSize: 10}}/>
+          {hero.curr_hp > 0 ? (
+            <Badge status="error" value={hero.curr_hp} containerStyle={{ position: 'absolute', bottom: 0, left: 0 }} textStyle={{fontSize: 10}}/>
+          ) : (
+            <View style={{ position: 'absolute', bottom: 0, left: 0 }}>
+              <Text style={{fontSize: 15}}>☠️</Text>
+            </View>
+          )}
           <Badge status="warning" value={hero.curr_mp} containerStyle={{ position: 'absolute', bottom: 0, right: 0 }} textStyle={{fontSize: 10}}/>
         </TouchableOpacity>)
     })
@@ -40,7 +46,13 @@ class LeftBar extends React.PureComponent {
       return (
         <TouchableOpacity key={animal.id} activeOpacity={0.7} style={{alignItems:'center', marginVertical:3}} onPress={() => {navigate('Animal',{animalId:animal.id})}}>
           <Thumbnail source={animal_image} />
+          {animal.curr_hp > 0 ? (
           <Badge status="error" value={animal.curr_hp} containerStyle={{ position: 'absolute', bottom: 0, left: 0 }} textStyle={{fontSize: 10}}/>
+          ) : (
+          <View style={{ position: 'absolute', bottom: 0, left: 0 }}>
+            <Text style={{fontSize: 15}}>☠️</Text>
+          </View>
+          )}
         </TouchableOpacity>)
     })
   }
@@ -53,7 +65,13 @@ class LeftBar extends React.PureComponent {
       return (
         <TouchableOpacity key={monster.id+"-"+i} activeOpacity={0.7} style={{alignItems:'center', marginVertical:3}} onPress={() => {navigate('Monster',{monsterId:monster.id,monsterKey: i})}}>
           <Thumbnail source={monster_image} />
+          {monster.curr_hp > 0 ? (
           <Badge status="error" value={monster.curr_hp} containerStyle={{ position: 'absolute', bottom: 0, left: 0 }} textStyle={{fontSize: 10}}/>
+          ) : (
+          <View style={{ position: 'absolute', bottom: 0, left: 0 }}>
+            <Text style={{fontSize: 15}}>☠️</Text>
+          </View>
+          )}
         </TouchableOpacity>)
     })
   }

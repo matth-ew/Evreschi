@@ -100,23 +100,23 @@ class AddMonster extends React.PureComponent {
     if(dungeon_level != null && !hero_levels.some(x => x == null)){
       return (
         <LeftRightBar navigation={this.props.navigation}>
-          <Tabs transparent renderTabBar={()=> <ScrollableTab style={{ alignItems: 'center',backgroundColor: "rgba(183, 183, 183, 0.15)" }} />}>
-            <Tab heading={<TabHeading style={{backgroundColor:'transparent'}}><Text>Bestie</Text></TabHeading>}
+          <Tabs tabBarUnderlineStyle={{borderBottomWidth:2}}>
+            <Tab heading={<TabHeading style={{backgroundColor: 'black'}}><Text>Bestie</Text></TabHeading>}
               style={{flex: 1, flexDirection:'row',flexWrap: 'wrap', marginHorizontal: '20%', backgroundColor: 'transparent'}}
             >
               {this.renderMonsters('beast')}
             </Tab>
-            <Tab heading={<TabHeading style={{backgroundColor:'transparent'}}><Text>Magici</Text></TabHeading>}
+            <Tab heading={<TabHeading style={{backgroundColor:'black'}}><Text>Magici</Text></TabHeading>}
               style={{flex: 1, flexDirection:'row',flexWrap: 'wrap', marginHorizontal: '20%', backgroundColor: 'transparent'}}
             >
               {this.renderMonsters('magical')}
             </Tab>
-            <Tab heading={<TabHeading style={{backgroundColor:'transparent'}}><Text>Umanoidi</Text></TabHeading>}
+            <Tab heading={<TabHeading style={{backgroundColor:'black'}}><Text>Umanoidi</Text></TabHeading>}
               style={{flex: 1, flexDirection:'row',flexWrap: 'wrap', marginHorizontal: '20%', backgroundColor: 'transparent'}}
             >
               {this.renderMonsters('humanoid')}
             </Tab>
-            <Tab heading={<TabHeading style={{backgroundColor:'transparent'}}><Text>Boss</Text></TabHeading>}
+            <Tab heading={<TabHeading style={{backgroundColor:'black'}}><Text>Boss</Text></TabHeading>}
               style={{flex: 1, flexDirection:'row',flexWrap: 'wrap', marginHorizontal: '20%', backgroundColor: 'transparent'}}
             >
               {this.renderMonsters('boss')}

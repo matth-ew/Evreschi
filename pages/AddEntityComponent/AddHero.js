@@ -50,8 +50,8 @@ class AddHero extends React.PureComponent {
       let isDisabled = false;
       if(this.props.heroes.find(elem => elem.id == heroId)) isDisabled = true;
       return (
-        <TouchableOpacity key={heroId} disabled={isDisabled} activeOpacity={0.7} style={{alignItems:'center',width: '33%', marginVertical:10}} onPress={() => {this.toggleModal(true);this.setHero(heroId)}}>
-          <Thumbnail square large source={hero.image} style={isDisabled?{opacity: 0.3}:{}}  />
+        <TouchableOpacity key={heroId} disabled={isDisabled} activeOpacity={0.7} style={{alignItems:'center',width: '33%',height: '25%', marginVertical:10}} onPress={() => {this.toggleModal(true);this.setHero(heroId)}}>
+          <Thumbnail square source={hero.image} style={isDisabled?{opacity: 0.3,width: '80%',height: 'auto', flex:1}:{width: '80%',height: 'auto', flex:1}}  />
           <Text style={{color:'white'}}>{hero.label}</Text>
         </TouchableOpacity>)
     })

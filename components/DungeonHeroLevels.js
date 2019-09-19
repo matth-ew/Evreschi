@@ -73,16 +73,15 @@ class DungeonHeroLevels extends React.PureComponent {
         isVisible={this.props.isVisible}
         submitFunction={this.submitFunction}
         toggleFunction={this.props.toggleFunction}
-        height='90%'
-        width='60%'>
-        <Form>
+        height='90%' width='60%' flex={6}>
+        <Form style={{flex:1}}>
           {hero_levels.map((hero_level,i) => {
           return(
-          <Item key={i} picker>
+          <Item key={i} style={{flex:1}} picker>
             <Text style={{flex:1}}>Eroe {i+1}</Text>
             <Picker key={i}
               selectedValue={hero_level}
-              style={{ flex:1,width: undefined }}
+              style={{flex:1, width: undefined }}
               onValueChange={ itemValue =>
                 this.setState(produce(draft => {
                   draft.hero_levels[i] = itemValue
@@ -94,11 +93,11 @@ class DungeonHeroLevels extends React.PureComponent {
           )
           })}
           {/*Dungeon Picker*/}
-          <Item key={"dungeon"} picker>
+          <Item key={"dungeon"} style={{flex:1}} picker>
             <Text style={{flex:1}}>Dungeon </Text>
             <Picker key={"dungeon"}
               selectedValue={dungeon_level}
-              style={{ flex:1,width: undefined }}
+              style={{flex:1,width: undefined }}
               onValueChange={ itemValue =>
                 this.setState(produce(draft => {
                   draft.dungeon_level = itemValue

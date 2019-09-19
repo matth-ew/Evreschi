@@ -71,12 +71,12 @@ class AddAnimalPopup extends React.PureComponent {
     const {animals,animalsIds} = animalsList
     return animalsIds.map( (animalId) => {
       const animal = animals[animalId]
-      let isDisabled = false;
-      if(this.props.animals.find(elem => elem.id == animalId)) isDisabled = true;
+      let isSelected = false;
+      if(this.state.animalId == animalId) isSelected = true;
       return (
-        <TouchableOpacity key={animalId} disabled={isDisabled} activeOpacity={0.7} style={{alignItems:'center',width: '33%', marginVertical:10}} onPress={() => {this.setAnimal(animalId)}}>
-          <Thumbnail square large source={animal.image} style={isDisabled?{opacity: 0.3}:{}}  />
-          <Text style={{color:'white'}}>{animal.label}</Text>
+        <TouchableOpacity key={animalId} activeOpacity={0.7} style={{alignItems:'center',width: '33%',height: '50%', marginVertical:5}} onPress={() => {this.setAnimal(animalId)}}>
+          <Thumbnail  square source={animal.image} style={isSelected?{borderColor: 'green',borderWidth:4,width: '80%',height: 'auto', flex:1}:{borderColor: 'black',borderWidth:1,width: '80%',height: 'auto',flex:1}}  />
+          <Text style={{color:'black'}}>{animal.label}</Text>
         </TouchableOpacity>)
     })
   }
@@ -93,13 +93,13 @@ class AddAnimalPopup extends React.PureComponent {
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
         height="80%" width="70%"
-        flex={5}>
+        flex={8}>
         <Form style={{flex:1}}>
-          <View style={{flex: 1, flexDirection:'row',flexWrap: 'wrap', marginHorizontal: '20%'}}>
+          <View style={{flex: 10, flexDirection:'row',flexWrap: 'wrap', marginHorizontal: '20%'}}>
             {this.renderAnimals()}
           </View>
-            <Item itemDivider/>
-            <Item key={"animal"} picker>
+            <Item style={{flex: 1}} itemDivider/>
+            <Item style={{flex: 2}} key={"animal"} picker>
               <Text style={{flex:1}}>Livello Animale</Text>
               <Picker key={"animal"}
                 selectedValue={animalLevel}

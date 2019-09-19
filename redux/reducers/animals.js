@@ -22,8 +22,11 @@ let defaultState = []
 
 const animals = (state = defaultState, action) =>
   produce(state, draft =>{
+  let index;
   switch(action.type) {
     case ADD_ANIMAL:
+    index = state.findIndex(x => x.id == action.animal.animalId)
+    if(index == -1){
       draft.push({
         id: action.animal.animalId,
         hp: parseInt(action.animal.animalHp),
@@ -32,6 +35,14 @@ const animals = (state = defaultState, action) =>
         def: parseInt(action.animal.animalDef),
         curr_def: parseInt(action.animal.animalDef),
       })
+    }
+    else{
+      draft[index].hp = parseInt(action.animal.animalHp);
+      draft[index].fp = 0
+      draft[index].def = parseInt(action.animal.animalDef);
+      draft[index].curr_hp = parseInt(action.animal.animalHp);
+      draft[index].curr_def = parseInt(action.animal.animalDef);
+    }
       return
     case CHANGE_ANIMAL:
       draft.forEach((animal,i) => {
@@ -44,7 +55,7 @@ const animals = (state = defaultState, action) =>
       });
       return
     case DELETE_ANIMAL:
-      let index = state.findIndex(x => x.id == action.id)
+      index = state.findIndex(x => x.id == action.id)
       if(index != -1){
         draft.splice(index,1)
       }

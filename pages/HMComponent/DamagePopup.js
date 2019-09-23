@@ -1,5 +1,6 @@
 import React from 'react';
-import {Icon, Input, Item, ListItem, Form, Text, CheckBox, Body, View, Picker} from 'native-base'
+import {TextInput} from 'react-native'
+import {Icon, Item, ListItem, Form, Text, CheckBox, Body, View, Picker} from 'native-base'
 import Popup from '../../components/Popup'
 
 class DamagePopup extends React.PureComponent {
@@ -67,7 +68,7 @@ class DamagePopup extends React.PureComponent {
           <Item style={{flex:1}}>
             <View style={{flex:1,flexDirection: 'row', alignItems:'center'}}>
               <Icon active name="dice-multiple" type='MaterialCommunityIcons' style={{color:"black",flex:1}} />
-              <Input style={{fontSize: 13,flex:3}} allowFontScaling={true} numberOfLines={1} placeholder="Risultato Dadi" keyboardType={'numeric'} value={dice} onChangeText={this.diceHandler}/>
+              <TextInput disableFullscreenUI={true} style={{fontSize: 13,flex:3}} allowFontScaling={true} numberOfLines={1} placeholder="Risultato Dadi" keyboardType={'numeric'} value={dice} onChangeText={this.diceHandler}/>
             </View>
             {this.props.monster_multiplier && (
               <View style={{flex:1,flexDirection: 'row', alignItems:'center'}}>

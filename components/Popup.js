@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, Dimensions,Modal } from 'react-native';
+import {TouchableOpacity, Dimensions,Modal, KeyboardAvoidingView} from 'react-native';
 import {View,Text} from 'native-base';
 import {Icon} from 'react-native-elements';
 //import {styles} from './Styles'
@@ -40,6 +40,7 @@ class Popup extends React.PureComponent {
     else
       return (
         <Modal visible={this.props.isVisible} onRequestClose={this.backButton} transparent={true} animationType='fade'>
+        <KeyboardAvoidingView style={{flex:1}} behavior="padding">
         <View style={{width,height, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)'}}>
           <View style={{
             height: this.props.height,
@@ -74,6 +75,7 @@ class Popup extends React.PureComponent {
           </View>
           </View>
         </View>
+      </KeyboardAvoidingView>
         </Modal>
       );
   }

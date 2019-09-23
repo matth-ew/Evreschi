@@ -66,7 +66,9 @@ class AddHero extends React.PureComponent {
         </View>
 
         {/*Modal*/}
-        <AddHeroStats isVisible={this.state.isVisible} toggleFunction={this.toggleModal} createHero={(heroHp,heroMp,heroDef) => this.createHero(this.state.heroId,heroHp,heroMp,heroDef)}/>
+        {this.state.isVisible && (
+          <AddHeroStats isVisible={this.state.isVisible} toggleFunction={this.toggleModal} createHero={(heroHp,heroMp,heroDef) => this.createHero(this.state.heroId,heroHp,heroMp,heroDef)}/>
+        )}
         {/*Bottone Home*/}
           <Button
             icon={
@@ -87,7 +89,7 @@ class AddHero extends React.PureComponent {
             }}
             onPress={() => {navigate('Main')}}
           />
-          {/*Bottone Undo*/}
+          {/*Bottone Undo
           <Button
             onPress={() => console.log("UNDO")}
             icon={
@@ -106,7 +108,7 @@ class AddHero extends React.PureComponent {
               bottom: 10,
               right: 10,
             }}
-          />
+          />*/}
       </LeftRightBar>
     );
   }

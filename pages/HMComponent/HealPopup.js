@@ -1,5 +1,6 @@
 import React from 'react';
-import {Icon, Input, Item, ListItem, Form, Text, CheckBox, Body, View, Picker} from 'native-base'
+import {TextInput} from 'react-native'
+import {Icon, Item, ListItem, Form, Text, CheckBox, Body, View, Picker} from 'native-base'
 import Popup from '../../components/Popup'
 
 class HealPopup extends React.PureComponent {
@@ -53,12 +54,12 @@ class HealPopup extends React.PureComponent {
         <Form style={{flex:1}}>
           <Item style={{flex:1}}>
             <Icon active name="beaker" style={{color:"red"}} />
-            <Input allowFontScaling={true} numberOfLines={1} placeholder="Punti Vita" keyboardType={'numeric'} value={hp_heal} onChangeText={this.hpHealHandler}/>
+            <TextInput disableFullscreenUI={true} returnKeyType="next" allowFontScaling={true} numberOfLines={1} placeholder="Punti Vita" keyboardType={'numeric'} value={hp_heal} onChangeText={this.hpHealHandler}/>
           </Item>
           {this.props.mana && (
             <Item style={{flex:1}}>
               <Icon active name="beaker" style={{color:"#faad14"}} />
-              <Input allowFontScaling={true} numberOfLines={1} placeholder="Punti Mana" keyboardType={'numeric'} value={mp_heal} onChangeText={this.mpHealHandler}/>
+              <TextInput disableFullscreenUI={true} returnKeyType="done" allowFontScaling={true} numberOfLines={1} placeholder="Punti Mana" keyboardType={'numeric'} value={mp_heal} onChangeText={this.mpHealHandler}/>
             </Item>
           )}
           <ListItem  style={{flex:1}} button onPress={() => this.setState({total_heal:!total_heal})}>

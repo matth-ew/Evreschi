@@ -1,5 +1,6 @@
 import React from 'react';
-import {View,Text, H3, Icon, Input, Item} from 'native-base';
+import {TextInput} from 'react-native'
+import {View,Text, H3, Icon, Item} from 'native-base';
 import Popup from '../../components/Popup'
 
 class ManaPopup extends React.PureComponent {
@@ -47,7 +48,7 @@ class ManaPopup extends React.PureComponent {
           <H3 style={{flex:1}}>Quanti punti mana usi?</H3>
           <Item style={{flex:1}}>
             <Icon active name="beaker" style={{color:"#faad14"}} />
-            <Input allowFontScaling={true} numberOfLines={1} placeholder="Punti Mana" keyboardType={'numeric'} value={mp_using} onChangeText={this.mpHandler}/>
+            <TextInput disableFullscreenUI={true} allowFontScaling={true} numberOfLines={1} placeholder="Punti Mana" keyboardType={'numeric'} value={mp_using} onChangeText={this.mpHandler}/>
           </Item>
         </View>
       </Popup>

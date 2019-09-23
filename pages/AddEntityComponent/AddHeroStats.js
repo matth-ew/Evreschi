@@ -1,6 +1,6 @@
 import React from 'react';
-import {View} from 'react-native';
-import {Icon,Input,Item,Form} from 'native-base'
+import {View,TextInput} from 'react-native';
+import {Icon,Item,Form} from 'native-base'
 import Popup from '../../components/Popup'
 
 class AddHeroStats extends React.PureComponent {
@@ -12,6 +12,10 @@ class AddHeroStats extends React.PureComponent {
       heroMp: null,
       heroDef: null
     }
+  }
+
+  componentDidMount(){
+    this.refs.hpRef.focus()
   }
 
   submitFunction = () => {
@@ -57,15 +61,15 @@ class AddHeroStats extends React.PureComponent {
         <Form style={{flex:1}}>
             <Item style={{flex:1}}>
               <Icon active name="heart" type='MaterialCommunityIcons' style={{color:"red"}} />
-              <Input placeholder="Punti Vita" keyboardType={'numeric'} value={this.state.heroHp} onChangeText={this.hpHandler}/>
+              <TextInput ref="hpRef" disableFullscreenUI={true} returnKeyType="next" placeholder="Punti Vita" keyboardType={'numeric'} value={this.state.heroHp} onChangeText={this.hpHandler} style={{flex:1}} onSubmitEditing={() => this.refs.mpRef.focus()}/>
             </Item>
             <Item style={{flex:1}}>
               <Icon active name="water" type='MaterialCommunityIcons' style={{color:"yellow"}} />
-              <Input placeholder="Punti Mana" keyboardType={'numeric'} value={this.state.heroMp} onChangeText={this.mpHandler}/>
+              <TextInput ref="mpRef" disableFullscreenUI={true} returnKeyType="next" placeholder="Punti Mana" keyboardType={'numeric'} value={this.state.heroMp} onChangeText={this.mpHandler} style={{flex:1}} onSubmitEditing={() => this.refs.defRef.focus()}/>
             </Item>
             <Item style={{flex:1}}>
               <Icon active name="shield" type='MaterialCommunityIcons' style={{color:"black"}} />
-              <Input placeholder="Difesa" keyboardType={'numeric'} value={this.state.heroDef} onChangeText={this.defHandler}/>
+              <TextInput ref="defRef" disableFullscreenUI={true} returnKeyType="done" placeholder="Difesa" keyboardType={'numeric'} value={this.state.heroDef} onChangeText={this.defHandler} style={{flex:1}}/>
             </Item>
           </Form>
       </Popup>

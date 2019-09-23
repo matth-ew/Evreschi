@@ -1,5 +1,6 @@
 import React from 'react';
-import {Icon, Input, Item, ListItem, Form, Text, CheckBox, Body, View, Picker} from 'native-base'
+import {TextInput} from 'react-native'
+import {Icon, Item, ListItem, Form, Text, CheckBox, Body, View, Picker} from 'native-base'
 import Popup from '../../components/Popup'
 
 class BonusMalusPopup extends React.PureComponent {
@@ -66,12 +67,12 @@ class BonusMalusPopup extends React.PureComponent {
             <Item style={{flex:1}}>
               <Icon active name="plus" type='MaterialCommunityIcons' style={{color:"green"}} />
               <Icon name='shield' type='MaterialCommunityIcons' style={{color:"green"}}/>
-              <Input allowFontScaling={true} numberOfLines={1} placeholder="Bonus" keyboardType={'numeric'} value={bonus} onChangeText={this.bonusHandler}/>
+              <TextInput disableFullscreenUI={true} allowFontScaling={true} numberOfLines={1} placeholder="Bonus" keyboardType={'numeric'} value={bonus} onChangeText={this.bonusHandler}/>
             </Item>
             <Item style={{flex:1}}>
               <Icon active name="minus" type='MaterialCommunityIcons' style={{color:"red"}} />
               <Icon name='shield' type='MaterialCommunityIcons' style={{color:"red"}}/>
-              <Input allowFontScaling={true} numberOfLines={1} placeholder="Malus" keyboardType={'numeric'} value={malus} onChangeText={this.malusHandler}/>
+              <TextInput disableFullscreenUI={true} allowFontScaling={true} numberOfLines={1} placeholder="Malus" keyboardType={'numeric'} value={malus} onChangeText={this.malusHandler}/>
             </Item>
             <ListItem style={{flex:1}} button onPress={() => this.setState({remove:!remove})}>
               <CheckBox color="grey" checked={remove} onPress={() => this.removeHandler(!remove)}/>

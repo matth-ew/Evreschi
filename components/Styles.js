@@ -18,5 +18,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     zIndex: 2
-  }
+  },
+  text: {
+    fontSize: 10,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "white"
+  },
 });

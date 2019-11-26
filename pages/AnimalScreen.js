@@ -1,254 +1,279 @@
-import React from 'react';
-import {TouchableOpacity} from 'react-native';
-import {Thumbnail,Button, Text, View} from 'native-base'
-import LeftRightBar from '../components/LeftRightBar'
-import {connect} from "react-redux";
-import animalsList from '../components/animals-list'
-import Health from './HMComponent/Health'
-import Defence from './HMComponent/Defence'
-import Fury from './HMComponent/Fury'
-import DamagePopup from './HMComponent/DamagePopup'
-import HealPopup from './HMComponent/HealPopup'
-import BonusMalusPopup from './HMComponent/BonusMalusPopup'
-import DeletePopup from './HMComponent/DeletePopup'
-import {changeAnimal,deleteAnimal,animalDamage,animalHeal,animalFury,animalDefence} from '../redux/actions/act-animals'
+import React from "react";
+import { Image, StyleSheet } from "react-native";
+import { Button, Text, View } from "native-base";
+import LeftRightBar from "../components/LeftRightBar";
+import { connect } from "react-redux";
+import animalsList from "../components/animals-list";
+import Health from "./HMComponent/Health";
+import Defence from "./HMComponent/Defence";
+import Fury from "./HMComponent/Fury";
+import DamagePopup from "./HMComponent/DamagePopup";
+import HealPopup from "./HMComponent/HealPopup";
+import BonusMalusPopup from "./HMComponent/BonusMalusPopup";
+import DeletePopup from "./HMComponent/DeletePopup";
+import {
+  deleteAnimal,
+  animalDamage,
+  animalHeal,
+  animalFury,
+  animalDefence
+} from "../redux/actions/act-animals";
 
 const mapStateToProps = state => {
   return {
     animals: state.Animals,
-    settings: state.Settings,
-   };
+    settings: state.Settings
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    changeAnimal: animal => dispatch(changeAnimal(animal)),
     deleteAnimal: id => dispatch(deleteAnimal(id)),
-    animalDamage: (id,damage) => dispatch(animalDamage(id,damage)),
-    animalHeal: (animal_heal) => dispatch(animalHeal(animal_heal)),
-    animalFury: (id,value) => dispatch(animalFury(id,value)),
-    animalDefence: (id,value) => dispatch(animalDefence(id,value)),
+    animalDamage: (id, damage) => dispatch(animalDamage(id, damage)),
+    animalHeal: animal_heal => dispatch(animalHeal(animal_heal)),
+    animalFury: (id, value) => dispatch(animalFury(id, value)),
+    animalDefence: (id, value) => dispatch(animalDefence(id, value))
   };
 };
 
 class AnimalScreen extends React.Component {
-
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       isDamageVisible: false,
       isHealVisible: false,
       isBonusMalusVisible: false,
-      isDeleteAnimalVisible: false,
-    }
+      isDeleteAnimalVisible: false
+    };
   }
 
-  toggleDamageModal = (visibility) => {
-    this.setState({isDamageVisible: visibility})
-  }
-  toggleFuryModal = (visibility) => {
-    this.setState({isFuryVisible: visibility})
-  }
-  toggleHealModal = (visibility) => {
-    this.setState({isHealVisible: visibility})
-  }
-  toggleBonusMalusModal = (visibility) => {
-    this.setState({isBonusMalusVisible: visibility})
-  }
+  toggleDamageModal = visibility => {
+    this.setState({ isDamageVisible: visibility });
+  };
+  toggleFuryModal = visibility => {
+    this.setState({ isFuryVisible: visibility });
+  };
+  toggleHealModal = visibility => {
+    this.setState({ isHealVisible: visibility });
+  };
+  toggleBonusMalusModal = visibility => {
+    this.setState({ isBonusMalusVisible: visibility });
+  };
 
   toggleDeleteAnimal = () => {
     this.setState(prevState => ({
-        isDeleteAnimalVisible: !prevState.isDeleteAnimalVisible
-      })
-    )
-  }
+      isDeleteAnimalVisible: !prevState.isDeleteAnimalVisible
+    }));
+  };
 
-  submitDamage = (dice,multiplier,critical,poison,burn) => {
-    const animalId = this.props.navigation.getParam('animalId', 'NO-ID');
-    const animal = this.props.animals.find(animal => animal.id == animalId)
+  submitDamage = (dice, multiplier, critical, withoutDefence) => {
+    const animalId = this.props.navigation.getParam("animalId", "NO-ID");
+    const animal = this.props.animals.find(animal => animal.id == animalId);
 
     let damage = 0;
-    if(dice){
+    if (dice) {
       //DANNO DA ATTACCO SUBITO
-      damage = (dice-animal.curr_def)*multiplier
-      if(critical) damage *= 2
-      //INCREMENTO DI 1 LE FURIE SE NON HO SANGUINAMENTO
-      if(!animal.bleeding) this.props.animalFury(animalId,1)
-    }
+      if (!withoutDefence) damage = (dice - animal.curr_def) * multiplier;
+      else damage = dice * multiplier;
 
-    if(damage > 0){
-      this.props.animalDamage(animalId,damage)
+      if (critical) damage *= 2;
+      //INCREMENTO DI 1 LE FURIE
+      this.props.animalFury(animalId, 1);
+
+      if (damage > 0) {
+        this.props.animalDamage(animalId, damage);
+      }
     }
-  }
+  };
 
   deleteAnimal = () => {
-    const {navigate} = this.props.navigation;
-    const animalId = this.props.navigation.getParam('animalId', 'NO-ID');
-    navigate('Main');
+    const { navigate } = this.props.navigation;
+    const animalId = this.props.navigation.getParam("animalId", "NO-ID");
+    navigate("Main");
     this.props.deleteAnimal(animalId);
-  }
+  };
 
-  submitHeal = (total_heal,hp_heal,mp_heal) => {
-    const animalId = this.props.navigation.getParam('animalId', 'NO-ID');
-    this.props.animalHeal({id:animalId,total_heal,hp_heal,mp_heal})
+  submitHeal = (total_heal, half_heal, hp_heal) => {
+    const animalId = this.props.navigation.getParam("animalId", "NO-ID");
+    this.props.animalHeal({ id: animalId, total_heal, half_heal, hp_heal });
+  };
+
+  handleFury = (val) => {
+    const animalId = this.props.navigation.getParam("animalId", "NO-ID");
+    this.props.animalFury(animalId, val);
   }
 
   submitFury = () => {
-    const animalId = this.props.navigation.getParam('animalId', 'NO-ID');
-    this.props.animalFury(animalId,-5)
-  }
+    const animalId = this.props.navigation.getParam("animalId", "NO-ID");
+    this.props.animalFury(animalId, -4);
+  };
 
-  submitBonusMalus = (bonus,malus,remove) => {
-    const animalId = this.props.navigation.getParam('animalId', 'NO-ID');
-    let value = 0
-    if(bonus) value = bonus
-    else if(malus) value -= malus
-    else value = 0
-    this.props.animalDefence(animalId,value)
-  }
+  submitBonusMalus = (bonus, malus, remove) => {
+    const animalId = this.props.navigation.getParam("animalId", "NO-ID");
+    let value = 0;
+    if (bonus) value = bonus;
+    else if (malus) value -= malus;
+    else value = 0;
+    this.props.animalDefence(animalId, value);
+  };
 
   render() {
-    const {navigation} = this.props;
-    const {navigate} = navigation;
-    const animalId = navigation.getParam('animalId', 'NO-ID');
-    const animal = this.props.animals.find(animal => animal.id == animalId)
-    const animal_image = animalsList.animals[animalId].image
+    const { navigation } = this.props;
+    const { navigate } = navigation;
+    const animalId = navigation.getParam("animalId", "NO-ID");
+    const animal = this.props.animals.find(animal => animal.id == animalId);
+    const { image, label } = animalsList.animals[animalId];
     return (
-      <LeftRightBar navigation={this.props.navigation} deleteFunction={this.toggleDeleteAnimal}>
-        <View style={{
-          flex: 1,
-          alignItems: 'center',
-        }}>
-
-          <View style={{
-            flex: 4,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
+      <LeftRightBar
+        navigation={this.props.navigation}
+        deleteFunction={this.toggleDeleteAnimal}
+      >
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
             flexDirection: "row"
-          }}>
-            <View style={{
-              width: '30%',
-              height: '80%',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-
-            }}>
-            {/*HP*/}
-              <Health curr_hp={animal.curr_hp} hp={animal.hp}/>
-            </View>
-
-
-            {/*Parte Centrale Superiore*/}
-            <View style={{
-              width: '20%',
-              height: '90%',
-              alignItems: 'center',
-            }}>
-              {/*Parte Centrale Superiore -- Immagine Eroe*/}
-              <View style={{
-                width: '100%',
-                height: '70%',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <Thumbnail  source={animal_image} style={{height:'90%',aspectRatio: 1, borderRadius: 999}}/>
+          }}
+        >
+          <View
+            style={{
+              flex: 4,
+              height: "100%",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              flexDirection: "column",
+              marginLeft: "10%",
+              paddingVertical: "5%"
+            }}
+          >
+            {/*Parte Centrale Superiore -- Immagine Animale*/}
+            <View
+              style={{
+                width: "60%",
+                height: "30%",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+                flexDirection: "row",
+                borderWidth: 2,
+                borderColor: "#F1C232",
+                backgroundColor: "black"
+              }}
+            >
+              <Image
+                source={image}
+                style={{ height: "100%", width: null, aspectRatio: 1 }}
+              />
+              <View
+                style={{
+                  flex: 1,
+                  height: "100%",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                  flexDirection: "column"
+                }}
+              >
+                <Text style={styles.text}>{label}</Text>
+                <Text style={styles.buttonText}> --Descrizione </Text>
               </View>
-              {/*Parte Centrale Superiore -- Punti Furia*/}
-              <Fury fp={animal.fp} submitFury={this.submitFury} />
             </View>
 
-            {/*Difesa e malus sulla difesa*/}
-            <Defence curr_def={animal.curr_def} def={animal.def}/>
+            <View
+              style={{
+                flex: 1,
+                width: "50%",
+                alignItems: "flex-start",
+                flexDirection: "column",
+                paddingBottom: "10%"
+              }}
+            >
+              <View
+                style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
+              >
+                <Health curr_hp={animal.curr_hp} hp={animal.hp} />
+              </View>
+              <View
+                style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
+              >
+                <Defence curr_def={animal.curr_def} def={animal.def} />
+              </View>
+              <View
+                style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
+              >
+                <Fury
+                  fp={animal.fp}
+                  max_fp={4}
+                  submitFury={this.submitFury}
+                  handleFury={this.handleFury}
+                />
+              </View>
+              <View
+                style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
+              />
+            </View>
           </View>
-
-{/*
-          //Parte Status Alterati
-          <View style={{
-            flex: 2,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: "rgba(155,155,155,0.5)"
-          }}>
-            <View style={{
-              flex: 1,
-              width: 100,
-              height: 100,
-              flexGrow: 0,
-            }} />
-          </View>
-*/}
 
           {/*Parte dei quattro bottoni*/}
-          <View style={{
-            flex: 4,
-            width: '100%',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            flexDirection: "row"
-          }}>
-            <View style={{
-              width: '30%',
-              height: '100%',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}>
-              <View style={{
-                width: '100%',
-                height: '30%',
-              }}>
-                <Button block light style = {{ elevation: 0 }}
-                  onPress={() => this.toggleDamageModal(!this.state.isDamageVisible)}>
-                  <Text>Danno</Text>
-                </Button>
-                { this.state.isDamageVisible && (
-                  <DamagePopup submitDamage={this.submitDamage}
-                    toggleFunction={this.toggleDamageModal}
-                    isVisible={this.state.isDamageVisible}
-                    monster_multiplier={this.props.settings.monster_multiplier}
-                  />
-                )}
-              </View>
-              <View style={{
-                width: '100%',
-                height: '30%',
-              }}>
-                <Button block light style = {{ elevation: 0 }}
-                  onPress={() => this.toggleHealModal(!this.state.isHealVisible)}>
-                  <Text>Cura</Text>
-                </Button>
-                <HealPopup
-                  submitHeal={this.submitHeal}
-                  toggleFunction={this.toggleHealModal}
-                  isVisible={this.state.isHealVisible}
-                />
-              </View>
-            </View>
-            <View style={{
-              width: '30%',
-              height: '100%',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}>
-              <View style={{
-                width: '100%',
-                height: '30%',
-              }}>
-                <Button block light style = {{ elevation: 0 }}
-                  onPress={() => this.toggleBonusMalusModal(!this.state.isBonusMalusVisible)}>
-                  <Text>Bonus/Malus</Text>
-                </Button>
-                <BonusMalusPopup
-                  submitBonusMalus={this.submitBonusMalus}
-                  toggleFunction={this.toggleBonusMalusModal}
-                  isVisible={this.state.isBonusMalusVisible}
-                />
-              </View>
-            </View>
+          <View
+            style={{
+              flex: 1,
+              height: "100%",
+              justifyContent: "space-around",
+              alignItems: "center",
+              flexDirection: "column"
+            }}
+          >
+            <Button
+              block
+              style={styles.button}
+              onPress={() =>
+                this.toggleDamageModal(!this.state.isDamageVisible)
+              }
+            >
+              <Text style={styles.buttonText}>Attacco</Text>
+            </Button>
+
+            <Button
+              block
+              style={styles.button}
+              onPress={() => this.toggleHealModal(!this.state.isHealVisible)}
+            >
+              <Text style={styles.buttonText}>Cura</Text>
+            </Button>
+
+            <Button
+              block
+              style={styles.button}
+              onPress={() =>
+                this.toggleBonusMalusModal(!this.state.isBonusMalusVisible)
+              }
+            >
+              <Text style={styles.buttonText}>Bonus/Malus</Text>
+            </Button>
           </View>
         </View>
-        { this.state.isDeleteAnimalVisible &&(
+
+        {this.state.isDamageVisible && (
+          <DamagePopup
+            submitDamage={this.submitDamage}
+            toggleFunction={this.toggleDamageModal}
+            isVisible={this.state.isDamageVisible}
+            monster_multiplier={this.props.settings.monster_multiplier}
+          />
+        )}
+
+        <HealPopup
+          submitHeal={this.submitHeal}
+          toggleFunction={this.toggleHealModal}
+          isVisible={this.state.isHealVisible}
+        />
+
+        <BonusMalusPopup
+          submitBonusMalus={this.submitBonusMalus}
+          toggleFunction={this.toggleBonusMalusModal}
+          isVisible={this.state.isBonusMalusVisible}
+        />
+
+        {this.state.isDeleteAnimalVisible && (
           <DeletePopup
             submitFunction={this.deleteAnimal}
             toggleFunction={this.toggleDeleteAnimal}
@@ -259,4 +284,24 @@ class AnimalScreen extends React.Component {
     );
   }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(AnimalScreen);
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "black",
+    borderWidth: 2,
+    height: "10%",
+    borderColor: "#F1C232"
+  },
+  text: {
+    fontSize: 15,
+    color: "white"
+  },
+  buttonText: {
+    fontSize: 10,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "white"
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnimalScreen);

@@ -1,6 +1,5 @@
 import {
   ADD_ANIMAL,
-  CHANGE_ANIMAL,
   DELETE_ANIMAL,
   DAMAGE,
   HEAL,
@@ -10,7 +9,6 @@ import {
 } from "../constants/const-animals";
 
 export const addAnimal = animal => ({type: ADD_ANIMAL, animal});
-export const changeAnimal = animal => ({type: CHANGE_ANIMAL, animal});
 export const deleteAnimal = id => ({type: DELETE_ANIMAL, id});
 export const animalDamage = (id,damage) => ({type: DAMAGE, id, damage})
 export const animalHeal = (animal_heal) => ({type: HEAL, ...animal_heal})

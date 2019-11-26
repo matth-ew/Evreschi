@@ -17,6 +17,7 @@ import {createStackNavigator, createSwitchNavigator, createAppContainer, StackAc
 import { useScreens } from 'react-native-screens';
 import * as Font from 'expo-font';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import Navigation from './Navigation/NavigationStack'
 
 useScreens();
 /*
@@ -44,6 +45,7 @@ const MonsterNavigator = createSwitchNavigator({
     }
 });
 */
+/*
 const AddEntityNavigator = createSwitchNavigator({
   AddEntity: {screen: AddEntity},
   AddHero: {screen: AddHero},
@@ -80,7 +82,7 @@ let Navigator = createSwitchNavigator({
 });
 
 let Navigation = createAppContainer(Navigator);
-
+*/
 
 class App extends React.Component {
   constructor(props) {

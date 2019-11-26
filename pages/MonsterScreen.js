@@ -1,277 +1,336 @@
-import React from 'react';
-import {TouchableOpacity} from 'react-native';
-import {Thumbnail,Button, Text, View} from 'native-base'
-import LeftRightBar from '../components/LeftRightBar'
-import {connect} from "react-redux";
-import monstersList from '../components/monsters-list'
-import Health from './HMComponent/Health'
-import Defence from './HMComponent/Defence'
-import DamagePopup from './HMComponent/DamagePopup'
-import DeletePopup from './HMComponent/DeletePopup'
-import HealPopup from './HMComponent/HealPopup'
-import AlteredStatusPopup from './HMComponent/AlteredStatusPopup'
-import BonusMalusPopup from './HMComponent/BonusMalusPopup'
-import {changeMonster,deleteMonster,monsterDamage,monsterMana,monsterHeal,monsterDefence,monsterAltered} from '../redux/actions/act-monsters'
+import React from "react";
+import { Image, StyleSheet } from "react-native";
+import { Button, Text, View } from "native-base";
+import LeftRightBar from "../components/LeftRightBar";
+import { connect } from "react-redux";
+import monstersList from "../components/monsters-list";
+import Health from "./HMComponent/Health";
+import Defence from "./HMComponent/Defence";
+import DamagePopup from "./HMComponent/DamagePopup";
+import DeletePopup from "./HMComponent/DeleteMonsterPopup";
+import HealPopup from "./HMComponent/HealPopup";
+import AlteredStatusPopup from "./HMComponent/AlteredStatusPopup";
+import BonusMalusPopup from "./HMComponent/BonusMalusPopup";
+import {
+  deleteMonster,
+  monsterDamage,
+  monsterHeal,
+  monsterDefence,
+  monsterAltered
+} from "../redux/actions/act-monsters";
 
 const mapStateToProps = state => {
   return {
     monsters: state.Monsters,
-    settings: state.Settings,
-   };
+    settings: state.Settings
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    changeMonster: monster => dispatch(changeMonster(monster)),
-    deleteMonster: key => dispatch(deleteMonster(key)),
-    monsterDamage: (id,damage) => dispatch(monsterDamage(id,damage)),
-    monsterHeal: (monster_heal) => dispatch(monsterHeal(monster_heal)),
-    monsterAltered: (monster_altered) => dispatch(monsterAltered(monster_altered)),
-    monsterDefence: (id,value) => dispatch(monsterDefence(id,value)),
+    deleteMonster: (key, options) =>
+      dispatch(deleteMonster(key, options)),
+    monsterDamage: (id, damage) => dispatch(monsterDamage(id, damage)),
+    monsterHeal: monster_heal => dispatch(monsterHeal(monster_heal)),
+    monsterAltered: monster_altered =>
+      dispatch(monsterAltered(monster_altered)),
+    monsterDefence: (id, value) => dispatch(monsterDefence(id, value))
   };
 };
 
 class MonsterScreen extends React.Component {
-
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       isDamageVisible: false,
       isHealVisible: false,
       isAlteredStatusVisible: false,
       isBonusMalusVisible: false,
-      isDeleteMonsterVisible: false,
-    }
+      isDeleteMonsterVisible: false
+    };
   }
 
-  toggleDamageModal = (visibility) => {
-    this.setState({isDamageVisible: visibility})
-  }
-  toggleHealModal = (visibility) => {
-    this.setState({isHealVisible: visibility})
-  }
-  toggleAlteredStatusModal = (visibility) => {
-    this.setState({isAlteredStatusVisible: visibility})
-  }
-  toggleBonusMalusModal = (visibility) => {
-    this.setState({isBonusMalusVisible: visibility})
-  }
+  toggleDamageModal = visibility => {
+    this.setState({ isDamageVisible: visibility });
+  };
+  toggleHealModal = visibility => {
+    this.setState({ isHealVisible: visibility });
+  };
+  toggleAlteredStatusModal = visibility => {
+    this.setState({ isAlteredStatusVisible: visibility });
+  };
+  toggleBonusMalusModal = visibility => {
+    this.setState({ isBonusMalusVisible: visibility });
+  };
 
   toggleDeleteMonster = () => {
     this.setState(prevState => ({
-        isDeleteMonsterVisible: !prevState.isDeleteMonsterVisible
-      })
-    )
-  }
+      isDeleteMonsterVisible: !prevState.isDeleteMonsterVisible
+    }));
+  };
 
-  submitDamage = (dice,multiplier,critical,poison,burn) => {
-    const monsterKey = this.props.navigation.getParam('monsterKey', 'NO-ID');
-    const monster = this.props.monsters[monsterKey]
+  submitDamage = (dice, multiplier, critical, withoutDefence, poison, burn) => {
+    const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
+    const monster = this.props.monsters[monsterKey];
 
     let damage = 0;
-    if(dice){
+    if (dice) {
       //DANNO DA ATTACCO SUBITO
-      damage = dice-monster.curr_def
-      if(critical) damage *= 2
+      if (!withoutDefence) damage = dice - monster.curr_def;
+      else damage = dice;
+
+      if (critical) damage *= 2;
+
+      if (damage > 0) {
+        if (poison) {
+          this.props.monsterAltered({
+            key: monsterKey,
+            poisoning: poison,
+            burning: null
+          });
+        }
+        if (burn) {
+          this.props.monsterAltered({
+            key: monsterKey,
+            poisoning: null,
+            burning: burn
+          });
+        }
+
+        this.props.monsterDamage(monsterKey, damage);
+      }
     }
-    else{
-      //DANNO DA VELENO E/O BRUCIATURA
-      if(burn)
-        damage = Math.ceil((monster.hp*10)/100)
-      if(poison)
-        damage += Math.ceil((monster.hp*15)/100)
+  };
+
+  submitPoison = () => {
+    const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
+    const monster = this.props.monsters[monsterKey];
+    const damage = Math.ceil((monster.hp * 10) / 100);
+    if (damage > 0) {
+      this.props.monsterDamage(monsterKey, damage);
     }
+  };
 
-    if(damage > 0){
-      this.props.monsterDamage(monsterKey,damage)
+  submitBurning = () => {
+    const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
+    const monster = this.props.monsters[monsterKey];
+    const damage = Math.ceil((monster.hp * 15) / 100);
+    if (damage > 0) {
+      this.props.monsterDamage(monsterKey, damage);
     }
-  }
+  };
 
-  deleteMonster = () => {
-    const {navigate} = this.props.navigation;
-    const monsterKey = this.props.navigation.getParam('monsterKey', 'NO-ID');
-    navigate('Main');
-    this.props.deleteMonster(monsterKey);
-  }
+  deleteMonster = (options) => {
+    const { navigate } = this.props.navigation;
+    const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
+    if(options.deleteAllDead) {
+      const monster = this.props.monsters[monsterKey];
+      if(monster.curr_hp === 0)
+        navigate("Main");
+    }
+    if(options.deleteThisMonster) {
+      navigate("Main");
+    }
+    this.props.deleteMonster(monsterKey, options);
+  };
 
-  submitHeal = (total_heal,hp_heal,mp_heal) => {
-    const monsterKey = this.props.navigation.getParam('monsterKey', 'NO-ID');
-    this.props.monsterHeal({key:monsterKey,total_heal,hp_heal,mp_heal})
-  }
+  submitHeal = (total_heal, half_heal, hp_heal, mp_heal) => {
+    const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
+    this.props.monsterHeal({ key: monsterKey, total_heal, hp_heal, mp_heal });
+  };
 
-  submitAltered = (poisoning,burning,bleeding) => {
-    const monsterKey = this.props.navigation.getParam('monsterKey', 'NO-ID');
-    this.props.monsterAltered({key:monsterKey,poisoning,burning})
-  }
+  submitAltered = (poisoning, burning, bleeding) => {
+    const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
+    this.props.monsterAltered({ key: monsterKey, poisoning, burning });
+  };
 
-
-  submitBonusMalus = (bonus,malus,remove) => {
-    const monsterKey = this.props.navigation.getParam('monsterKey', 'NO-ID');
-    let value = 0
-    if(bonus) value = bonus
-    else if(malus) value -= malus
-    else value = 0
-    this.props.monsterDefence(monsterKey,value)
-  }
+  submitBonusMalus = (bonus, malus, remove) => {
+    const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
+    let value = 0;
+    if (bonus) value = bonus;
+    else if (malus) value -= malus;
+    else value = 0;
+    this.props.monsterDefence(monsterKey, value);
+  };
 
   render() {
-    const {navigation} = this.props;
-    const {navigate} = navigation;
-    const monsterId = navigation.getParam('monsterId', 'NO-ID');
-    const monsterKey = navigation.getParam('monsterKey', 'NO-ID');
-    const monster = this.props.monsters[monsterKey]
-    const monster_image = monstersList.monsters[monsterId].image
+    const { navigation } = this.props;
+    const { navigate } = navigation;
+    const monsterId = navigation.getParam("monsterId", "NO-ID");
+    const monsterKey = navigation.getParam("monsterKey", "NO-ID");
+    const monster = this.props.monsters[monsterKey];
+    const { image, label } = monstersList.monsters[monsterId];
     return (
-      <LeftRightBar navigation={this.props.navigation} deleteFunction={this.toggleDeleteMonster}>
-        <View style={{
-          flex: 1,
-          alignItems: 'center',
-        }}>
-
-          <View style={{
-            flex: 4,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
+      <LeftRightBar
+        navigation={this.props.navigation}
+        deleteFunction={this.toggleDeleteMonster}
+      >
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
             flexDirection: "row"
-          }}>
-            <View style={{
-              width: '30%',
-              height: '80%',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-
-            }}>
-            {/*HP, veleno e bruciatura*/}
-              <Health curr_hp={monster.curr_hp} hp={monster.hp} poisoning={monster.poisoning} burning={monster.burning}/>
-            </View>
-
-
-            {/*Parte Centrale Superiore*/}
-            <View style={{
-              width: '20%',
-              height: '90%',
-              alignItems: 'center',
-            }}>
-              {/*Parte Centrale Superiore -- Immagine Eroe*/}
-              <View style={{
-                width: '100%',
-                height: '70%',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <Thumbnail  source={monster_image} style={{height:'90%',aspectRatio: 1, borderRadius: 999}}/>
+          }}
+        >
+          <View
+            style={{
+              flex: 4,
+              height: "100%",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              flexDirection: "column",
+              marginLeft: "10%",
+              paddingVertical: "5%"
+            }}
+          >
+            {/*Parte Centrale Superiore -- Immagine Mostro*/}
+            <View
+              style={{
+                width: "60%",
+                height: "30%",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+                flexDirection: "row",
+                borderWidth: 2,
+                borderColor: "#F1C232",
+                backgroundColor: "black"
+              }}
+            >
+              <Image
+                source={image}
+                style={{ height: "100%", width: null, aspectRatio: 1 }}
+              />
+              <View
+                style={{
+                  flex: 1,
+                  height: "100%",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                  flexDirection: "column"
+                }}
+              >
+                <Text style={styles.text}>
+                  {label}
+                </Text>
+                <Text style={styles.buttonText}> --Descrizione </Text>
               </View>
-              {/*Parte Centrale Superiore -- Punti Furia e Sanguinamento*/}
             </View>
 
-            {/*Difesa e malus sulla difesa*/}
-            <Defence curr_def={monster.curr_def} def={monster.def}/>
+            <View
+              style={{
+                flex: 1,
+                width: "50%",
+                alignItems: "flex-start",
+                flexDirection: "column",
+                paddingBottom: "10%"
+              }}
+            >
+              <View
+                style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
+              >
+                <Health
+                  curr_hp={monster.curr_hp}
+                  hp={monster.hp}
+                  poisoning={monster.poisoning}
+                  burning={monster.burning}
+                  submitPoison={this.submitPoison}
+                  submitBurning={this.submitBurning}
+                />
+              </View>
+              <View
+                style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
+              >
+                <Defence curr_def={monster.curr_def} def={monster.def} />
+              </View>
+              <View
+                style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
+              />
+              <View
+                style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
+              />
+            </View>
           </View>
-
-{/*
-          //Parte Status Alterati
-          <View style={{
-            flex: 2,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: "rgba(155,155,155,0.5)"
-          }}>
-            <View style={{
-              flex: 1,
-              width: 100,
-              height: 100,
-              flexGrow: 0,
-            }} />
-          </View>
-*/}
-
           {/*Parte dei quattro bottoni*/}
-          <View style={{
-            flex: 4,
-            width: '100%',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            flexDirection: "row"
-          }}>
-            <View style={{
-              width: '30%',
-              height: '100%',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}>
-              <View style={{
-                width: '100%',
-                height: '30%',
-              }}>
-                <Button block light style = {{ elevation: 0 }}
-                  onPress={() => this.toggleDamageModal(!this.state.isDamageVisible)}>
-                  <Text>Danno</Text>
-                </Button>
-                { this.state.isDamageVisible && (
-                  <DamagePopup submitDamage={this.submitDamage}
-                    toggleFunction={this.toggleDamageModal}
-                    isVisible={this.state.isDamageVisible}
-                    poison_burning
-                  />
-                )}
-              </View>
-              <View style={{
-                width: '100%',
-                height: '30%',
-              }}>
-                <Button block light style = {{ elevation: 0 }}
-                  onPress={() => this.toggleHealModal(!this.state.isHealVisible)}>
-                  <Text>Cura</Text>
-                </Button>
-                <HealPopup
-                  submitHeal={this.submitHeal}
-                  toggleFunction={this.toggleHealModal}
-                  isVisible={this.state.isHealVisible}
-                />
-              </View>
-            </View>
-            <View style={{
-              width: '30%',
-              height: '100%',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}>
-              <View style={{
-                width: '100%',
-                height: '30%',
-              }}>
-                <Button block light style = {{ elevation: 0 }}
-                  onPress={() => this.toggleAlteredStatusModal(!this.state.isAlteredStatusVisible)}>
-                  <Text>Status Alterati</Text>
-                </Button>
-                {this.state.isAlteredStatusVisible&& (
-                  <AlteredStatusPopup
-                    poisoning={monster.poisoning} burning={monster.burning}
-                    submitAltered={this.submitAltered}
-                    toggleFunction={this.toggleAlteredStatusModal}
-                    isVisible={this.state.isAlteredStatusVisible}/>
-                )}
-              </View>
-              <View style={{
-                width: '100%',
-                height: '30%',
-              }}>
-                <Button block light style = {{ elevation: 0 }}
-                  onPress={() => this.toggleBonusMalusModal(!this.state.isBonusMalusVisible)}>
-                  <Text>Bonus/Malus</Text>
-                </Button>
-                <BonusMalusPopup
-                  submitBonusMalus={this.submitBonusMalus}
-                  toggleFunction={this.toggleBonusMalusModal}
-                  isVisible={this.state.isBonusMalusVisible}
-                />
-              </View>
-            </View>
+          <View
+            style={{
+              flex: 1,
+              height: "100%",
+              justifyContent: "space-around",
+              alignItems: "center",
+              flexDirection: "column"
+            }}
+          >
+            <Button
+              block
+              style={styles.button}
+              onPress={() =>
+                this.toggleDamageModal(!this.state.isDamageVisible)
+              }
+            >
+              <Text style={styles.buttonText}>Attacco</Text>
+            </Button>
+
+            <Button
+              block
+              style={styles.button}
+              onPress={() => this.toggleHealModal(!this.state.isHealVisible)}
+            >
+              <Text style={styles.buttonText}>Cura</Text>
+            </Button>
+
+            <Button
+              block
+              style={styles.button}
+              onPress={() =>
+                this.toggleAlteredStatusModal(
+                  !this.state.isAlteredStatusVisible
+                )
+              }
+            >
+              <Text style={styles.buttonText}>Status Alterati</Text>
+            </Button>
+
+            <Button
+              block
+              style={styles.button}
+              onPress={() =>
+                this.toggleBonusMalusModal(!this.state.isBonusMalusVisible)
+              }
+            >
+              <Text style={styles.buttonText}>Bonus/Malus</Text>
+            </Button>
           </View>
         </View>
-        { this.state.isDeleteMonsterVisible &&(
+        {this.state.isDamageVisible && (
+          <DamagePopup
+            submitDamage={this.submitDamage}
+            toggleFunction={this.toggleDamageModal}
+            isVisible={this.state.isDamageVisible}
+            poison_burning
+          />
+        )}
+        {this.state.isAlteredStatusVisible && (
+          <AlteredStatusPopup
+            poisoning={monster.poisoning}
+            burning={monster.burning}
+            submitAltered={this.submitAltered}
+            toggleFunction={this.toggleAlteredStatusModal}
+            isVisible={this.state.isAlteredStatusVisible}
+          />
+        )}
+        <HealPopup
+          submitHeal={this.submitHeal}
+          toggleFunction={this.toggleHealModal}
+          isVisible={this.state.isHealVisible}
+        />
+
+        <BonusMalusPopup
+          submitBonusMalus={this.submitBonusMalus}
+          toggleFunction={this.toggleBonusMalusModal}
+          isVisible={this.state.isBonusMalusVisible}
+        />
+
+        {this.state.isDeleteMonsterVisible && (
           <DeletePopup
             submitFunction={this.deleteMonster}
             toggleFunction={this.toggleDeleteMonster}
@@ -282,4 +341,23 @@ class MonsterScreen extends React.Component {
     );
   }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(MonsterScreen);
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "black",
+    borderWidth: 2,
+    height: "10%",
+    borderColor: "#F1C232"
+  },
+  text: {
+    fontSize: 15,
+    color: "white"
+  },
+  buttonText: {
+    fontSize: 10,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "white"
+  }
+});
+export default connect(mapStateToProps, mapDispatchToProps)(MonsterScreen);

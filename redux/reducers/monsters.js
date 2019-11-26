@@ -1,7 +1,6 @@
-import produce, { applyPatches } from "immer";
+import produce from "immer";
 import {
   ADD_MONSTER,
-  CHANGE_MONSTER,
   DELETE_MONSTER,
   DAMAGE,
   HEAL,
@@ -25,36 +24,51 @@ const monsters = (state = defaultState, action) =>
   let monster
   switch(action.type) {
     case ADD_MONSTER:
-      draft.push({
-        id: action.monster.monsterId,
-        hp: parseInt(action.monster.monsterHp),
-        curr_hp: parseInt(action.monster.monsterHp),
-        def: parseInt(action.monster.monsterDef),
-        curr_def: parseInt(action.monster.monsterDef),
-        poisoning: false,
-        burning: false,
-      })
-      return
-    case CHANGE_MONSTER:
-      draft[action.monster.key].hp = parseInt(action.monster.monsterHp);
-      draft[action.monster.key].def = parseInt(action.monster.monsterDef);
-      draft[action.monster.key].curr_hp = parseInt(action.monster.monsterHp);
-      draft[action.monster.key].curr_def = parseInt(action.monster.monsterDef);
-      draft[action.monster.key].poisoning= false;
-      draft[action.monster.key].burning= false;
+      for(i = 0; i < action.number; i++)
+        draft.push({
+          id: action.monster.monsterId,
+          hp: parseInt(action.monster.monsterHp),
+          curr_hp: parseInt(action.monster.monsterHp),
+          def: parseInt(action.monster.monsterDef),
+          curr_def: parseInt(action.monster.monsterDef),
+          poisoning: false,
+          burning: false,
+        })
       return
     case DELETE_MONSTER:
-      draft.splice(action.key,1)
+      if(action.options.killThisMonster){
+        draft[action.key].curr_hp = 0;
+      }
+      if(action.options.killAllMonsters){
+        state.forEach((monster,i) => {
+          draft[i].curr_hp = 0;
+        });
+      }
+      else if(action.options.deleteAllDead){
+        return draft.filter((x,i) => x.curr_hp !== 0);
+      }
+      else if(action.options.deleteThisMonster){
+        draft.splice(action.key,1);
+      }
       return
     case DAMAGE:
       monster = state[action.key]
       const next_hp = monster.curr_hp - action.damage;
-      draft[action.key].curr_hp =  (next_hp > 0 ? next_hp : 0)
+      if(next_hp > 0) draft[action.key].curr_hp = next_hp;
+      else {
+        draft[action.key].curr_hp = 0;
+        draft[action.key].curr_mp = 0;
+        draft[action.key].poisoning= false;
+        draft[action.key].burning= false;
+      } 
       return
     case HEAL:
       monster = state[action.key]
       if(action.total_heal){
         draft[action.key].curr_hp = monster.hp
+      }
+      else if(action.half_heal){
+        draft[action.key].curr_hp = Math.ceil((monster.hp) / 2);
       }
       else{
         if(action.hp_heal){
@@ -64,8 +78,8 @@ const monsters = (state = defaultState, action) =>
       }
       return
     case ALTERED:
-      draft[action.key].poisoning = action.poisoning
-      draft[action.key].burning = action.burning
+      if(action.poisoning != null) draft[action.key].poisoning = action.poisoning
+      if(action.burning != null) draft[action.key].burning = action.burning
       return
     case DEFENCE:
       monster = state[action.key]

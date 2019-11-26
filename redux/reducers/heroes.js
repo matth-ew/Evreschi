@@ -25,13 +25,15 @@ let defaultState = []
 
 const heroes = (state = defaultState, action) =>
   produce(state, draft =>{
+  console.log(action.type)
   switch(action.type) {
     case ADD_HERO:
       draft.push({
         id: action.hero.heroId,
         hp: parseInt(action.hero.heroHp),
         mp: parseInt(action.hero.heroMp),
-        fp: 0,
+        curr_fp: 0,
+        fp: parseInt(action.hero.heroFp),
         curr_hp: parseInt(action.hero.heroHp),
         curr_mp: parseInt(action.hero.heroMp),
         def: parseInt(action.hero.heroDef),
@@ -66,7 +68,15 @@ const heroes = (state = defaultState, action) =>
       draft.forEach((hero,i) => {
         if(hero.id == action.id){
           const next_hp = hero.curr_hp - action.damage;
-          (next_hp > 0 ? draft[i].curr_hp = next_hp :  draft[i].curr_hp = 0)
+          if(next_hp > 0) draft[i].curr_hp = next_hp;
+          else {
+            draft[i].curr_hp = 0;
+            draft[i].curr_mp = 0;
+            draft[i].curr_fp = 0;
+            draft[i].poisoning= false;
+            draft[i].burning= false;
+            draft[i].bleeding= false;
+          } 
         }
       });
       return
@@ -85,6 +95,10 @@ const heroes = (state = defaultState, action) =>
             draft[i].curr_hp = hero.hp
             draft[i].curr_mp = hero.mp
           }
+          else if(action.half_heal){
+            draft[i].curr_hp = Math.ceil((hero.hp) / 2);
+            draft[i].curr_mp = Math.ceil((hero.mp) / 2);
+          }
           else{
             if(action.hp_heal){
               const next_hp = hero.curr_hp + parseInt(action.hp_heal);
@@ -101,19 +115,19 @@ const heroes = (state = defaultState, action) =>
     case FURY:
       draft.forEach((hero,i) => {
         if(hero.id == action.id){
-          const fp = hero.fp + action.value
-          if(fp > 5) draft[i].fp = 5
-          else if(fp < 0) draft[i].fp = 0
-          else draft[i].fp = fp
+          const curr_fp = hero.curr_fp + action.value
+          if(curr_fp > hero.fp) draft[i].curr_fp = hero.fp
+          else if(curr_fp < 0) draft[i].curr_fp = 0
+          else draft[i].curr_fp = curr_fp
         }
       });
       return
     case ALTERED:
       draft.forEach((hero,i) => {
         if(hero.id == action.id){
-          draft[i].poisoning = action.poisoning
-          draft[i].burning = action.burning
-          draft[i].bleeding = action.bleeding
+          if(action.poisoning != null) draft[i].poisoning = action.poisoning
+          if(action.burning != null) draft[i].burning = action.burning
+          if(action.bleeding != null) draft[i].bleeding = action.bleeding
         }
       });
       return

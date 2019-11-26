@@ -1,7 +1,6 @@
 import produce, { applyPatches } from "immer";
 import {
   ADD_ANIMAL,
-  CHANGE_ANIMAL,
   DELETE_ANIMAL,
   DAMAGE,
   HEAL,
@@ -44,16 +43,6 @@ const animals = (state = defaultState, action) =>
       draft[index].curr_def = parseInt(action.animal.animalDef);
     }
       return
-    case CHANGE_ANIMAL:
-      draft.forEach((animal,i) => {
-        if(animal.id == action.animal.id){
-        draft[i].hp = parseInt(action.animal.animalHp);
-        draft[i].def = parseInt(action.animal.animalDef);
-        draft[i].curr_hp = parseInt(action.animal.animalHp);
-        draft[i].curr_def = parseInt(action.animal.animalDef);
-        }
-      });
-      return
     case DELETE_ANIMAL:
       index = state.findIndex(x => x.id == action.id)
       if(index != -1){
@@ -64,7 +53,11 @@ const animals = (state = defaultState, action) =>
       draft.forEach((animal,i) => {
         if(animal.id == action.id){
           const next_hp = animal.curr_hp - action.damage;
-          (next_hp > 0 ? draft[i].curr_hp = next_hp :  draft[i].curr_hp = 0)
+          if(next_hp > 0) draft[i].curr_hp = next_hp;
+          else {
+            draft[i].curr_hp = 0;
+            draft[i].curr_fp = 0;
+          } 
         }
       });
       return
@@ -73,6 +66,9 @@ const animals = (state = defaultState, action) =>
         if(animal.id == action.id){
           if(action.total_heal){
             draft[i].curr_hp = animal.hp
+          }
+          else if(action.half_heal){
+            draft[i].curr_hp = Math.ceil((animal.hp) / 2);
           }
           else{
             if(action.hp_heal){
@@ -87,7 +83,7 @@ const animals = (state = defaultState, action) =>
       draft.forEach((animal,i) => {
         if(animal.id == action.id){
           const fp = animal.fp + action.value
-          if(fp > 5) draft[i].fp = 5
+          if(fp > 4) draft[i].fp = 4
           else if(fp < 0) draft[i].fp = 0
           else draft[i].fp = fp
         }

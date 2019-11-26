@@ -77,7 +77,7 @@ class AlteredStatusPopup extends React.PureComponent {
           </ListItem>
           <ListItem style={{flex:1}} button onPress={() => this.setState({burning:!burning})}>
             <Body>
-              <Text>Bruciatura</Text>
+              <Text>Ustione</Text>
             </Body>
             <CheckBox color="grey" checked={burning} onPress={() => this.setState({burning:!burning})}/>
           </ListItem>

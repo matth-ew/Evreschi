@@ -6,19 +6,7 @@ class Defence extends React.PureComponent {
   render() {
     const {curr_def,def} = this.props
     return(
-      <View style={{
-        width: '30%',
-        height: '80%',
-        justifyContent: 'flex-start',
-
-      }}>
-        <View style={{
-          width: '100%',
-          height: '30%',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          flexDirection: 'row-reverse',
-        }}>
+      <React.Fragment>
         {/*Difesa*/}
           <View style={{
             flex: 6,
@@ -26,6 +14,10 @@ class Defence extends React.PureComponent {
             justifyContent: 'space-between',
             alignItems: 'center',
             backgroundColor: "white",
+            borderWidth: 1,
+            borderColor: "white",
+            borderRadius: 5,
+            overflow: "hidden",
             flexDirection: 'column',
           }}>
             <View style={{width: '100%',
@@ -65,8 +57,7 @@ class Defence extends React.PureComponent {
           }}>
 
           </View>
-        </View>
-      </View>
+      </React.Fragment>
     )
   }
 }

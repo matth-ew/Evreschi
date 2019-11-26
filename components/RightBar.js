@@ -37,8 +37,8 @@ class RightBar extends React.PureComponent {
     const {navigate} = this.props.navigation;
     const {hero_levels,dungeon_level} = this.state
     return(
-      <View style={{width: 55,height: '100%', alignItems:'center',justifyContent:'space-between', backgroundColor: '#666666',flexDirection: 'column'}}>
-        <Icon raised
+      <View style={{width: "10%",height: '100%', alignItems:'center',justifyContent:'space-between',flexDirection: 'column'}}>
+        <Icon raised small
               name='compass'
               color='grey'
               type='material-community'
@@ -51,7 +51,7 @@ class RightBar extends React.PureComponent {
           <DungeonHeroLevels isVisible={this.state.isVisible} toggleFunction={this.toggleModal}/>
         )}
         {this.props.animalFunction && (
-          <Icon raised
+          <Icon raised small
               name='dog-side'
               color='grey'
               type='material-community'
@@ -61,7 +61,7 @@ class RightBar extends React.PureComponent {
         />)}
 
         {this.props.editFunction && (
-          <Icon raised
+          <Icon raised small
               name='account-edit'
               color='grey'
               type='material-community'

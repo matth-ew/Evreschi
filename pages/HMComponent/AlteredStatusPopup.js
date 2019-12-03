@@ -9,7 +9,6 @@ class AlteredStatusPopup extends React.PureComponent {
       poisoning: false,
       burning: false,
       bleeding: false,
-      remove: false,
     }
   }
 
@@ -26,7 +25,6 @@ class AlteredStatusPopup extends React.PureComponent {
       poisoning: value,
       burning: value,
       bleeding: value,
-      remove: value,
     })
   }
 
@@ -35,33 +33,34 @@ class AlteredStatusPopup extends React.PureComponent {
       poisoning: false,
       burning: false,
       bleeding: false,
-      remove: false,
     })
   }
 
   componentDidMount() {
     const {poisoning,burning,bleeding} = this.props
-    let remove;
-    if(this.props.bleeding != undefined) remove = ((poisoning&&burning&&bleeding) ? true : false)
-    else remove = ((poisoning&&burning) ? true : false)
     this.setState({
       poisoning,
       burning,
-      bleeding,
-      remove
+      bleeding
     })
   }
 
+
   render() {
-    const {poisoning,burning,bleeding,remove} = this.state
+    const {poisoning,burning,bleeding} = this.state
+    const remove = (this.props.bleeding != undefined ? (poisoning||burning||bleeding) : (poisoning||burning))
     return (
       <Popup
         isVisible={this.props.isVisible}
         submitFunction={this.submitFunction}
         toggleFunction={this.props.toggleFunction}
-        height="60%" flex={4}>
-        <Form style={{flex:1}}>
-          <ListItem button onPress={this.resetStats} style={{flex:1}}>
+        height={50 +
+        (this.props.bleeding!= undefined ? 10 : 0) +
+        "%"}
+         flex={4}
+        title="Status Alterati">
+        <Form style={{ flex: 1, borderTopColor: "#DCDCDC", borderTopWidth: 1 }}>
+          <ListItem button onPress={() => this.toggleAll(!remove)} style={{flex:1}}>
             <Body>
               <Text>Seleziona/Deseleziona tutto</Text>
             </Body>

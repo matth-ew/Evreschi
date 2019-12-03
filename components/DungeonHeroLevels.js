@@ -10,6 +10,7 @@ import { Form, Item, Text } from "native-base";
 import produce from "immer";
 import Popup from "./Popup";
 import monstersList from "./monsters-list";
+import heroesList from "./heroes-list";
 import { connect } from "react-redux";
 import { setLevels } from "../redux/actions/act-settings";
 
@@ -30,6 +31,7 @@ class DungeonHeroLevels extends React.PureComponent {
     super(props);
     this.state = {
       hero_levels: [null, null, null, null, null],
+      hero_selected: [null, null, null, null, null],
       dungeon_level: null
     };
   }
@@ -37,6 +39,7 @@ class DungeonHeroLevels extends React.PureComponent {
   componentDidMount() {
     this.setState({
       hero_levels: [...this.props.settings.hero_levels],
+      hero_selected: (this.props.settings.hero_selected ? this.props.settings.hero_selected : [null, null, null, null, null]),
       dungeon_level: this.props.settings.dungeon_level
     });
   }
@@ -59,6 +62,16 @@ class DungeonHeroLevels extends React.PureComponent {
     return pickerItems;
   };
 
+  heroPicker = (hero_selected,i) => {
+    var pickerItems = [];
+    heroesList.heroesIds.forEach(heroId => {
+      pickerItems.push(
+        <Picker.Item key={heroId || i} label={heroesList.heroes[heroId].label} value={heroId} />
+      );
+    })
+    return pickerItems;
+  };
+
   dungeonPicker = () => {
     var pickerItems = [];
     monstersList.dungeonsIds.forEach((dungeonId, i) => {
@@ -72,7 +85,7 @@ class DungeonHeroLevels extends React.PureComponent {
   };
 
   submitFunction = () => {
-    const { hero_levels, dungeon_level } = this.state;
+    const { hero_levels, hero_selected, dungeon_level } = this.state;
     const { dungeons, fasce } = monstersList;
     let multipliers = null;
     if (dungeon_level) {
@@ -100,13 +113,14 @@ class DungeonHeroLevels extends React.PureComponent {
 
     this.props.setLevels({
       hero_levels: hero_levels,
+      hero_selected: hero_selected,
       dungeon_level: dungeon_level,
       monster_multiplier: multipliers
     });
   };
 
   render() {
-    const { hero_levels, dungeon_level } = this.state;
+    const { hero_levels, hero_selected, dungeon_level } = this.state;
     return (
       <Popup
         isVisible={this.props.isVisible}
@@ -115,14 +129,28 @@ class DungeonHeroLevels extends React.PureComponent {
         height="90%"
         width="50%"
         flex={6}
+        title="Imposta livelli"
       >
-        <Form style={{ flex: 1 }}>
+        <Form style={{ flex: 1, borderTopColor: "#DCDCDC", borderTopWidth: 1 }}>
           {hero_levels.map((hero_level, i) => {
             return (
               <Item key={i} style={{ flex: 1 }} picker>
-                <Text style={{ flex: 1, textAlign: "center" }}>
-                  Eroe {i + 1}
-                </Text>
+                <Picker
+                  key={"hero "+i}
+                  mode="dropdown"
+                  selectedValue={hero_selected[i]}
+                  style={{ flex: 1, width: undefined }}
+                  onValueChange={itemValue =>
+                    this.setState(
+                      produce(draft => {
+                        draft.hero_selected[i] = itemValue;
+                      })
+                    )
+                  }
+                >
+                  <Picker.Item label={"Eroe "+ (i+1)} value={null} />
+                  {this.heroPicker(hero_selected,i)}
+                </Picker>
                 <Picker
                   key={i}
                   mode="dropdown"
@@ -144,7 +172,7 @@ class DungeonHeroLevels extends React.PureComponent {
           })}
           {/*Dungeon Picker*/}
           <Item key={"dungeon"} style={{ flex: 1 }} picker>
-            <Text style={{ flex: 1, textAlign: "center" }}>Dungeon </Text>
+            <Text style={{ flex: 1 }}>  Dungeon</Text>
             <Picker
               key={"dungeon"}
               mode="dropdown"

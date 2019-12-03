@@ -6,22 +6,23 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 import { View, Text } from "native-base";
-import { Icon } from "react-native-elements";
-import {styles} from './Styles'
 
-class Popup extends React.PureComponent {
+import {styles} from '../../components/Styles'
+
+class DescriptionPopup extends React.PureComponent {
   static defaultProps = {
     width: "50%",
-    height: "50%",
+    height: "70%",
     isDisabled: false,
     submitText: "Conferma",
-    backText: "Annulla",
+    backText: "Chiudi",
     flex: 3
   };
 
   constructor(props) {
     super(props);
   }
+
 
   handleBackPress = () => {
     this.props.toggleFunction?.(false);
@@ -36,8 +37,10 @@ class Popup extends React.PureComponent {
     this.props.cancelFunction?.();
     this.props.toggleFunction?.(!this.props.isVisible);
   };
+
   render() {
     var { width, height } = Dimensions.get("window");
+    const fontSize = Math.min(Math.sqrt(0.35*width*height/this.props.description.length),25)
     if (!this.props.isVisible) {
       return <View />;
     } else
@@ -49,16 +52,16 @@ class Popup extends React.PureComponent {
           animationType="fade"
         >
           <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-            <View
+            <View onPress={() => this.backButton()}
               style={{
                 width,
                 height,
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "rgba(0,0,0,0.5)"
+                backgroundColor: "rgba(0,0,0,0.7)"
               }}
             >
-              <View
+              <View onPress={() => this.backButton()}
                 style={{
                   height: this.props.height,
                   width: this.props.width,
@@ -66,7 +69,7 @@ class Popup extends React.PureComponent {
                   alignItems: "center",
                   flexDirection: "column",
                   borderRadius: 10,
-                  backgroundColor: "white"
+                  backgroundColor: "transparent"
                 }}
               >
                 
@@ -80,36 +83,16 @@ class Popup extends React.PureComponent {
                     width: "100%"
                   }}
                 >
-                    <Text style={styles.titleText}>{this.props.title}</Text>
+                    <Text allowFontScaling={true} maxFontSizeMultiplier={0} style={styles.descriptionPopupTitleText}>{this.props.title}</Text>
                 </View>}
 
                 {/* Content */}
-                <View style={{ flex: this.props.flex, width: "100%" }}>
-                  {this.props.children}
+                <View  style={{ flex: this.props.flex, width: "100%" }}>
+                  <Text style={[styles.descriptionPopupText,{  fontSize }]}>{this.props.description}</Text>
                 </View>
-
-                {/* Buttons */}
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                    width: "100%"
-                  }}
-                >
-                  <TouchableOpacity onPress={() => this.backButton()}>
-                    <Text>{this.props.backText}</Text>
+                <TouchableOpacity onPress={() => this.backButton()}>
+                    <Text style={styles.descriptionPopupText}>{this.props.backText}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    disabled={this.props.isDisabled}
-                    onPress={() => this.submitButton()}
-                  >
-                    <Text style={this.props.isDisabled ? { opacity: 0.3 } : {}}>
-                      {this.props.submitText}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -118,4 +101,4 @@ class Popup extends React.PureComponent {
   }
 }
 
-export default Popup;
+export default DescriptionPopup;

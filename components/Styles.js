@@ -1,4 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
+
+const width = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
   overlayBackground: {
@@ -21,6 +23,23 @@ export const styles = StyleSheet.create({
   },
   text: {
     fontSize: 10,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "white"
+  },
+  titleText: {
+    fontSize: 15,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  descriptionPopupText: {
+    //fontSize: 0.05*width,
+    fontSize: 20,
+    textAlign: "justify",
+    color: "white"
+  },
+  descriptionPopupTitleText: {
+    fontSize: 25,
     fontWeight: "bold",
     textAlign: "center",
     color: "white"

@@ -56,9 +56,9 @@ class ManaPopup extends React.PureComponent {
         submitFunction={this.submitFunction}
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
-        height="40%" width="40%" flex={2}>
+        height="30%" width="40%" flex={2}
+        title="Usa punti mana">
         <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          <H3 style={{flex:1}}>Quanti punti mana usi?</H3>
           <Item style={{flex:1}}>
             <Icon active name="beaker" style={{color:"#faad14"}} />
             <TextInput ref="mpRef" disableFullscreenUI={true} allowFontScaling={true} numberOfLines={1} placeholder="Punti Mana" keyboardType={'numeric'} value={mp_using} onChangeText={this.mpHandler}/>

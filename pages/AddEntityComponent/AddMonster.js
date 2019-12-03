@@ -83,8 +83,8 @@ class AddMonster extends React.PureComponent {
     console.log("ID: ", monsterId);
     this.setState({ monsterId: monsterId });
   };
-
-  renderMonsters = type => {
+  /*
+  renderMonstersBis = type => {
     const { dungeons, fasce, monsters, monstersIds } = monstersList;
     const { dungeon_level, hero_levels } = this.props.settings;
 
@@ -93,7 +93,7 @@ class AddMonster extends React.PureComponent {
 
     return monstersIds.map(monsterId => {
       const monster = monsters[monsterId];
-      /*if(this.props.heroes.find(elem => elem.id == heroId)) isDisabled = true;*/
+      //if(this.props.heroes.find(elem => elem.id == heroId)) isDisabled = true;
       if (
         type == monster.type &&
         fasce[dungeons[dungeon_level].fasce[0]].monsters[monsterId]
@@ -105,8 +105,11 @@ class AddMonster extends React.PureComponent {
             activeOpacity={0.7}
             style={{
               alignItems: "center",
-              height: "33%",
-              aspectRatio: 1,
+              minWidth: "20%",
+              minHeight: "30%",
+              maxWidth: "30%",
+              maxHeight: "40%",
+              flex: 1,
               marginVertical: 10
             }}
             onPress={() => {
@@ -129,6 +132,60 @@ class AddMonster extends React.PureComponent {
         );
       } else return;
     });
+  };*/
+
+  renderMonsters = type => {
+    const { dungeons, fasce, monsters, monstersIds } = monstersList;
+    const { dungeon_level, hero_levels } = this.props.settings;
+
+    let isDisabled = false;
+    if(this.props.monsters.length > 7 ) isDisabled = true;
+    let count = 0;
+    let monsters_vector = monstersIds.filter(monsterId => (monsters[monsterId].type == type && fasce[dungeons[dungeon_level].fasce[0]].monsters[monsterId]))
+    console.log(type,monsters_vector)
+    let firstRow = [], secondRow = [];
+    monsters_vector.forEach((monsterId,i) => {
+      const monster = monsters[monsterId];
+      let elem = (<TouchableOpacity
+      key={monsterId}
+      disabled={isDisabled}
+      activeOpacity={0.7}
+      style={{
+        alignItems: "center",
+        minWidth: "20%",
+        minHeight: "55%",
+        maxWidth: "30%",
+        maxHeight: "75%",
+        flex: 1,
+        marginVertical: 10
+      }}
+      onPress={() => {
+        this.toggleModal(true);
+        this.setMonster(monsterId);
+      }}
+    >
+      <Image
+        large
+        source={monster.image}
+        style={[
+          { width: "80%", height: "auto", flex: 1 },
+          isDisabled ? { opacity: 0.3 } : {}
+        ]}
+      />
+      <Text style={styles.text}>
+        {monster.label}
+      </Text>
+    </TouchableOpacity>);
+
+      if(i < Math.ceil(monsters_vector.length/2))
+      firstRow.push(elem)
+      else secondRow.push(elem)
+    })
+
+    return <View style={{flexDirection: "column", flex: 1}}>
+      <View style={{flexDirection: "row", justifyContent: 'center', flex: 1}}>{firstRow}</View>
+      <View style={{flexDirection: "row", justifyContent: 'center', flex: 1}}>{secondRow}</View>
+    </View>
   };
 
   render() {
@@ -150,7 +207,7 @@ class AddMonster extends React.PureComponent {
                 flexDirection: "row",
                 flexWrap: "wrap",
                 justifyContent: "space-around",
-                marginHorizontal: "20%",
+                paddingHorizontal: "20%",
                 backgroundColor: "transparent"
               }}
             >
@@ -167,7 +224,7 @@ class AddMonster extends React.PureComponent {
                 flexDirection: "row",
                 flexWrap: "wrap",
                 justifyContent: "space-around",
-                marginHorizontal: "20%",
+                paddingHorizontal: "20%",
                 backgroundColor: "transparent"
               }}
             >
@@ -184,7 +241,7 @@ class AddMonster extends React.PureComponent {
                 flexDirection: "row",
                 flexWrap: "wrap",
                 justifyContent: "space-around",
-                marginHorizontal: "20%",
+                paddingHorizontal: "20%",
                 backgroundColor: "transparent"
               }}
             >
@@ -201,7 +258,7 @@ class AddMonster extends React.PureComponent {
                 flexDirection: "row",
                 flexWrap: "wrap",
                 justifyContent: "space-around",
-                marginHorizontal: "20%",
+                paddingHorizontal: "20%",
                 backgroundColor: "transparent"
               }}
             >
@@ -209,11 +266,14 @@ class AddMonster extends React.PureComponent {
             </Tab>
           </Tabs>
           {/*Modal*/}
+          { this.state.isVisible &&
           <AddMonsterPopup
+            monsterId={this.state.monsterId}
             isVisible={this.state.isVisible}
             toggleFunction={this.toggleModal}
             createMonster={(number) => this.createMonster(this.state.monsterId,number)}
           />
+          }
           {/*Bottone Home*/}
           <Button
             icon={

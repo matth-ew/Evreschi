@@ -28,7 +28,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    deleteAnimal: id => dispatch(deleteAnimal(id)),
+    deleteAnimal: (id,options) => dispatch(deleteAnimal(id,options)),
     animalDamage: (id, damage) => dispatch(animalDamage(id, damage)),
     animalHeal: animal_heal => dispatch(animalHeal(animal_heal)),
     animalFury: (id, value) => dispatch(animalFury(id, value)),
@@ -86,11 +86,13 @@ class AnimalScreen extends React.Component {
     }
   };
 
-  deleteAnimal = () => {
+  deleteAnimal = (options) => {
     const { navigate } = this.props.navigation;
     const animalId = this.props.navigation.getParam("animalId", "NO-ID");
-    navigate("Main");
-    this.props.deleteAnimal(animalId);
+    if(options.deleteThisEntity) {
+      navigate("Main");
+    }
+    this.props.deleteAnimal(animalId,options);
   };
 
   submitHeal = (total_heal, half_heal, hp_heal) => {
@@ -275,6 +277,7 @@ class AnimalScreen extends React.Component {
 
         {this.state.isDeleteAnimalVisible && (
           <DeletePopup
+            curr_hp = {animal.curr_hp}
             submitFunction={this.deleteAnimal}
             toggleFunction={this.toggleDeleteAnimal}
             isVisible={this.state.isDeleteAnimalVisible}

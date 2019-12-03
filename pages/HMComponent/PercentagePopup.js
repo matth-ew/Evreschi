@@ -55,27 +55,25 @@ class PercentagePopup extends React.PureComponent {
         submitFunction={this.submitFunction}
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
-        height="40%"
+        height="30%"
         width="40%"
         flex={2}
+        title="Subisci Danno Percentuale"
       >
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <H3 style={{ flex: 1 }}>Danno Percentuale</H3>
           <Item style={{ flex: 1 }}>
           <View
                 style={{
-                  backgroundColor: "white",
                   height: "100%",
                   aspectRatio: 1,
-                  borderRadius: 9999,
                   alignItems: "center",
                   justifyContent: "center"
                 }}
               >
             <Image
-              style={{ height: "60%", aspectRatio: 1 }}
+              style={{ height: "50%", aspectRatio: 1 }}
               source={percentage}
             />
             </View>

@@ -1,20 +1,10 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { View, Button, Text } from "native-base";
 import LeftRightBar from "../components/LeftRightBar";
 import { connect } from "react-redux";
 import heroesList from "../components/heroes-list";
-import Health from "./HMComponent/Health";
-import Defence from "./HMComponent/Defence";
-import Mana from "./HMComponent/Mana";
-import Fury from "./HMComponent/Fury";
-import DamagePopup from "./HMComponent/DamagePopup";
-import HealPopup from "./HMComponent/HealPopup";
-import AlteredStatusPopup from "./HMComponent/AlteredStatusPopup";
-import BonusMalusPopup from "./HMComponent/BonusMalusPopup";
-import EditHeroPopup from "./HMComponent/EditHeroPopup";
-import AddAnimalPopup from "./HMComponent/AddAnimalPopup";
-import DeletePopup from "./HMComponent/DeletePopup";
+import {Health,Defence,Mana,Fury,DamagePopup,HealPopup,AlteredStatusPopup,BonusMalusPopup,EditHeroPopup,AddAnimalPopup,DeletePopup,DescriptionPopup} from "./HMComponent"
 import {
   changeHero,
   deleteHero,
@@ -36,7 +26,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     changeHero: hero => dispatch(changeHero(hero)),
-    deleteHero: id => dispatch(deleteHero(id)),
+    deleteHero: (id,options) => dispatch(deleteHero(id,options)),
     heroDamage: (id, damage) => dispatch(heroDamage(id, damage)),
     heroMana: (id, value) => dispatch(heroMana(id, value)),
     heroHeal: hero_heal => dispatch(heroHeal(hero_heal)),
@@ -56,10 +46,14 @@ class HeroScreen extends React.Component {
       isBonusMalusVisible: false,
       isEditHeroVisible: false,
       isAnimalVisible: false,
-      isDeleteHeroVisible: false
+      isDeleteHeroVisible: false,
+      isDescriptionVisible: false,
     };
   }
 
+  toggleDescriptionModal = visibility => {
+    this.setState({ isDescriptionVisible: visibility });
+  };
   toggleDamageModal = visibility => {
     this.setState({ isDamageVisible: visibility });
   };
@@ -137,11 +131,13 @@ class HeroScreen extends React.Component {
     }
   };
 
-  deleteHero = () => {
+  deleteHero = (options) => {
     const { navigate } = this.props.navigation;
     const heroId = this.props.navigation.getParam("heroId", "NO-ID");
-    navigate("Main");
-    this.props.deleteHero(heroId);
+    if(options.deleteThisEntity) {
+      navigate("Main");
+    }
+    this.props.deleteHero(heroId,options);
   };
 
   submitPercentDamage = (percent) => {
@@ -216,7 +212,7 @@ class HeroScreen extends React.Component {
     const { navigate } = navigation;
     const heroId = navigation.getParam("heroId", "NO-ID");
     const hero = this.props.heroes.find(hero => hero.id == heroId);
-    const { image, label, subclass } = heroesList.heroes[heroId];
+    const { image, label, subclass, description } = heroesList.heroes[heroId];
     return (
       <LeftRightBar
         navigation={this.props.navigation}
@@ -271,7 +267,7 @@ class HeroScreen extends React.Component {
                 <Text style={styles.text}>
                   {label}, {subclass}
                 </Text>
-                <Text style={styles.buttonText}> --Descrizione </Text>
+                <Text allowFontScaling={true} numberOfLines={3} style={styles.buttonText}> {description} </Text><TouchableOpacity onPress={() => this.toggleDescriptionModal(!this.state.isDescriptionVisible)}><Text style={styles.buttonText}>Mostra Altro</Text></TouchableOpacity>
               </View>
             </View>
             
@@ -420,9 +416,19 @@ class HeroScreen extends React.Component {
         )}
         {this.state.isDeleteHeroVisible && (
           <DeletePopup
+            hero={true}
+            curr_hp={hero.curr_hp}
             submitFunction={this.deleteHero}
             toggleFunction={this.toggleDeleteHero}
             isVisible={this.state.isDeleteHeroVisible}
+          />
+        )}
+        {this.state.isDescriptionVisible && (
+          <DescriptionPopup
+            title={label}
+            description={description}
+            toggleFunction={this.toggleDescriptionModal}
+            isVisible={this.state.isDescriptionVisible}
           />
         )}
         <AddAnimalPopup

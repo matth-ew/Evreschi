@@ -71,6 +71,7 @@ class AddHeroStats extends React.PureComponent {
         submitText="Crea"
         backText="Annulla"
         flex={3}
+        title="Aggiungi Eroe"
       >
         <Form style={{ flex: 1 }}>
           <Item style={{ flex: 1 }}>

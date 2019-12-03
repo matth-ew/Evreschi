@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text,View,SafeAreaView, ImageBackground, ScrollView} from 'react-native';
 import {Button, Header, Avatar, Icon} from 'react-native-elements'
-import background from '../assets/background.jpg'
+import background from '../assets/background_bis.jpg'
 import LeftBar from '../components/LeftBar'
 import RightBar from '../components/RightBar'
 

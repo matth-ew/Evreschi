@@ -332,6 +332,7 @@ class MonsterScreen extends React.Component {
 
         {this.state.isDeleteMonsterVisible && (
           <DeletePopup
+            curr_hp={monster.curr_hp}
             submitFunction={this.deleteMonster}
             toggleFunction={this.toggleDeleteMonster}
             isVisible={this.state.isDeleteMonsterVisible}

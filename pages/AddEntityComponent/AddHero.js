@@ -104,7 +104,7 @@ class AddHero extends React.PureComponent {
               flexDirection: "row",
               flexWrap: "wrap",
               justifyContent: "space-around",
-              marginHorizontal: "20%",
+              marginHorizontal: "10%",
               backgroundColor: "transparent"
             }}
           >
@@ -121,7 +121,7 @@ class AddHero extends React.PureComponent {
               flexDirection: "row",
               flexWrap: "wrap",
               justifyContent: "space-around",
-              marginHorizontal: "20%",
+              marginHorizontal: "10%",
               backgroundColor: "transparent"
             }}
           >
@@ -138,7 +138,7 @@ class AddHero extends React.PureComponent {
               flexDirection: "row",
               flexWrap: "wrap",
               justifyContent: "space-around",
-              marginHorizontal: "20%",
+              marginHorizontal: "10%",
               backgroundColor: "transparent"
             }}
           >

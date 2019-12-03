@@ -61,9 +61,9 @@ class BonusMalusPopup extends React.PureComponent {
         submitFunction={this.submitFunction}
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
-        height="60%" flex={4}>
-          <Form style={{flex:1}}>
-            <Text>Specificare il bonus o il malus della difesa</Text>
+        height="60%" flex={4}
+        title="Bonus/Malus">
+          <Form style={{ flex: 1, borderTopColor: "#DCDCDC", borderTopWidth: 1 }}>
             <Item style={{flex:1}}>
               <Icon active name="plus" type='MaterialCommunityIcons' style={{color:"green"}} />
               <Icon name='shield' type='MaterialCommunityIcons' style={{color:"green"}}/>

@@ -92,8 +92,9 @@ class AddAnimalPopup extends React.PureComponent {
         submitFunction={this.submitFunction}
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
-        height="80%" width="70%"
-        flex={8}>
+        height="80%"
+        flex={8}
+        title="Aggiungi Animale">
         <Form style={{flex:1}}>
           <View style={{flex: 10, flexDirection:'row',flexWrap: 'wrap', marginHorizontal: '20%'}}>
             {this.renderAnimals()}

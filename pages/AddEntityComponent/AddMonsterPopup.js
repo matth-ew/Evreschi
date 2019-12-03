@@ -14,6 +14,7 @@ class AddMonsterPopup extends React.PureComponent {
 
   submitFunction = () => {
     this.props.createMonster(this.state.monsters_number);
+    this.setState({monsters_number: 1})
   }
 
   levelPicker = (max) => {
@@ -26,15 +27,16 @@ class AddMonsterPopup extends React.PureComponent {
   };
 
   render() {
+    const multiple = (this.props.monsterId ? !this.props.monsterId.includes("boss") : false);
     return(
       <Popup
         isVisible={this.props.isVisible}
         submitFunction={this.submitFunction}
         toggleFunction={this.props.toggleFunction}
         submitText="Crea" backText="Annulla"
-        height="40%" width="40%" flex={3}>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          <H3>Vuoi aggiungere il mostro?</H3>
+        height="30%" width="30%" flex={(multiple ? 2 : 0)}
+        title="Aggiungi Mostro">
+        {multiple && <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
           <Item key={"dungeon"} style={{ flex: 1 }} picker>
             <Text style={{ flex: 1, textAlign: "center" }}>Quanti? </Text>
             <Picker
@@ -52,7 +54,7 @@ class AddMonsterPopup extends React.PureComponent {
               {this.levelPicker(6)}
             </Picker>
           </Item>
-        </View>
+        </View>}
       </Popup>
     );
   }

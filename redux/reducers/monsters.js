@@ -38,10 +38,14 @@ const monsters = (state = defaultState, action) =>
     case DELETE_MONSTER:
       if(action.options.killThisMonster){
         draft[action.key].curr_hp = 0;
+        draft[action.key].poisoning= false;
+        draft[action.key].burning= false;
       }
-      if(action.options.killAllMonsters){
+      else if(action.options.killAllMonsters){
         state.forEach((monster,i) => {
           draft[i].curr_hp = 0;
+          draft[i].poisoning= false;
+          draft[i].burning= false;
         });
       }
       else if(action.options.deleteAllDead){
@@ -57,7 +61,6 @@ const monsters = (state = defaultState, action) =>
       if(next_hp > 0) draft[action.key].curr_hp = next_hp;
       else {
         draft[action.key].curr_hp = 0;
-        draft[action.key].curr_mp = 0;
         draft[action.key].poisoning= false;
         draft[action.key].burning= false;
       } 

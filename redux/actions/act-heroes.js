@@ -13,7 +13,7 @@ import {
 
 export const addHero = hero => ({type: ADD_HERO, hero});
 export const changeHero = hero => ({type: CHANGE_HERO, hero});
-export const deleteHero = id => ({type: DELETE_HERO, id});
+export const deleteHero = (id,options) => ({type: DELETE_HERO, id,options});
 export const heroDamage = (id,damage) => ({type: DAMAGE, id, damage})
 export const heroMana = (id,value) => ({type: MANA, id, value})
 export const heroHeal = (hero_heal) => ({type: HEAL, ...hero_heal})

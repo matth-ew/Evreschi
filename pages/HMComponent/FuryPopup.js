@@ -16,11 +16,8 @@ class FuryPopup extends React.PureComponent {
         isVisible={this.props.isVisible}
         submitFunction={this.submitFunction}
         toggleFunction={this.props.toggleFunction}
-        height="30%" width="40%">
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          <H3>Vuoi usare i tuoi punti furia?</H3>
-        </View>
-      </Popup>
+        height="20%" width="30%" flex={0}
+        title="Usa Colpo Furia"/>
     );
   }
 }

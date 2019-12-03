@@ -62,8 +62,9 @@ class HealPopup extends React.PureComponent {
         submitFunction={this.submitFunction}
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
-        width="25%">
-        <Form style={{ flex: 1 }}>
+        width="25%"
+        title="Cura">
+        <Form style={{ flex: 1, borderTopColor: "#DCDCDC", borderTopWidth: 1 }}>
           <Item style={{ flex: 1 }}>
             <Icon active name="beaker" style={{ color: "red" }} />
             <TextInput

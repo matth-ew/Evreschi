@@ -67,6 +67,7 @@ class EditHeroPopup extends React.PureComponent {
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
         width="25%"
+        title="Modifica Eroe"
       >
         <Form style={{ flex: 1 }}>
           <Item style={{ flex: 1 }}>

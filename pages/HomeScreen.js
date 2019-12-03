@@ -1,7 +1,7 @@
 import React from 'react';
 import {ImageBackground, StyleSheet} from 'react-native';
 import {Button,Text,H1, View} from 'native-base'
-import background from '../assets/background.jpg'
+import background from '../assets/background_bis.jpg'
 import {connect} from "react-redux";
 import {resetHeroes} from '../redux/actions/act-heroes'
 import {resetMonsters} from '../redux/actions/act-monsters'

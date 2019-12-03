@@ -139,8 +139,9 @@ class DamagePopup extends React.PureComponent {
           (this.props.poison_burning ? 1 : 0) +
           (this.props.bleeding ? 1 : 0)
         }
+        title="Subisci Attacco"
       >
-        <Form style={{ flex: 1 }}>
+        <Form style={{ flex: 1, borderTopColor: "#DCDCDC", borderTopWidth: 1 }}>
           <Item style={{ flex: 1 }}>
             <View
               style={{ flex: 1, flexDirection: "row", alignItems: "center" }}

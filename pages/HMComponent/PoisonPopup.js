@@ -15,11 +15,8 @@ class PoisonPopup extends React.PureComponent {
         isVisible={this.props.isVisible}
         submitFunction={this.submitFunction}
         toggleFunction={this.props.toggleFunction}
-        height="30%" width="40%" flex={2}>
-        <View style={{flex:1, flexDirection: "column", alignItems: 'center', justifyContent: "center"}}>
-          <H3>Subisci veleno</H3>
-        </View>
-      </Popup>
+        height="20%" width="30%" flex={0}
+        title="Subisci Veleno"/>
     );
   }
 }

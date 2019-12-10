@@ -6,5 +6,6 @@ import magicWand from './magic-wand.png';
 import percentage from './percentage.png';
 import plus from './add.png';
 import minus from './minus.png';
+import plusMinus from './plus-minus.png';
 
-export {fire,poison,fury,blood,magicWand,percentage,plus,minus}
+export {fire,poison,fury,blood,magicWand,percentage,plus,minus,plusMinus}

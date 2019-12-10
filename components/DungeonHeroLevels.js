@@ -1,9 +1,5 @@
 import React from "react";
 import {
-  View,
-  SafeAreaView,
-  ImageBackground,
-  ScrollView,
   Picker
 } from "react-native";
 import { Form, Item, Text } from "native-base";
@@ -62,12 +58,13 @@ class DungeonHeroLevels extends React.PureComponent {
     return pickerItems;
   };
 
-  heroPicker = (hero_selected,i) => {
+  heroPicker = (i) => {
     var pickerItems = [];
     heroesList.heroesIds.forEach(heroId => {
-      pickerItems.push(
-        <Picker.Item key={heroId || i} label={heroesList.heroes[heroId].label} value={heroId} />
-      );
+      //if(!this.state.hero_selected.filter((x,index) => {return index!==i}).includes(heroId))
+        pickerItems.push(
+          <Picker.Item key={heroId || i} label={heroesList.heroes[heroId].label} value={heroId}/>
+        );
     })
     return pickerItems;
   };
@@ -138,18 +135,21 @@ class DungeonHeroLevels extends React.PureComponent {
                 <Picker
                   key={"hero "+i}
                   mode="dropdown"
-                  selectedValue={hero_selected[i]}
+                  selectedValue={this.state.hero_selected[i]}
                   style={{ flex: 1, width: undefined }}
-                  onValueChange={itemValue =>
+                  onValueChange={itemValue =>{
+                    console.log("ITEMVALUE",itemValue)
                     this.setState(
                       produce(draft => {
                         draft.hero_selected[i] = itemValue;
                       })
                     )
                   }
+                    
+                  }
                 >
                   <Picker.Item label={"Eroe "+ (i+1)} value={null} />
-                  {this.heroPicker(hero_selected,i)}
+                  {this.heroPicker(i)}
                 </Picker>
                 <Picker
                   key={i}

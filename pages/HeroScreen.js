@@ -4,7 +4,19 @@ import { View, Button, Text } from "native-base";
 import LeftRightBar from "../components/LeftRightBar";
 import { connect } from "react-redux";
 import heroesList from "../components/heroes-list";
-import {Health,Defence,Mana,Fury,DamagePopup,HealPopup,AlteredStatusPopup,BonusMalusPopup,EditHeroPopup,AddAnimalPopup,DeletePopup,DescriptionPopup} from "./HMComponent"
+import {
+  Health,
+  Defence,
+  Mana,
+  Fury,
+  DamagePopup,
+  HealPopup,
+  AlteredStatusPopup,
+  EditHeroPopup,
+  AddAnimalPopup,
+  DeletePopup,
+  DescriptionPopup
+} from "./HMComponent";
 import {
   changeHero,
   deleteHero,
@@ -26,7 +38,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     changeHero: hero => dispatch(changeHero(hero)),
-    deleteHero: (id,options) => dispatch(deleteHero(id,options)),
+    deleteHero: (id, options) => dispatch(deleteHero(id, options)),
     heroDamage: (id, damage) => dispatch(heroDamage(id, damage)),
     heroMana: (id, value) => dispatch(heroMana(id, value)),
     heroHeal: hero_heal => dispatch(heroHeal(hero_heal)),
@@ -43,11 +55,10 @@ class HeroScreen extends React.Component {
       isDamageVisible: false,
       isHealVisible: false,
       isAlteredStatusVisible: false,
-      isBonusMalusVisible: false,
       isEditHeroVisible: false,
       isAnimalVisible: false,
       isDeleteHeroVisible: false,
-      isDescriptionVisible: false,
+      isDescriptionVisible: false
     };
   }
 
@@ -66,9 +77,7 @@ class HeroScreen extends React.Component {
   toggleAlteredStatusModal = visibility => {
     this.setState({ isAlteredStatusVisible: visibility });
   };
-  toggleBonusMalusModal = visibility => {
-    this.setState({ isBonusMalusVisible: visibility });
-  };
+
   toggleEditHero = () => {
     this.setState(prevState => ({
       isEditHeroVisible: !prevState.isEditHeroVisible
@@ -113,17 +122,32 @@ class HeroScreen extends React.Component {
       if (critical) damage *= 2;
       //INCREMENTO DI 1 LE FURIE SE NON HO SANGUINAMENTO, ALTRIMENTI DECREMENTO
       if (hero.bleeding) this.props.heroFury(heroId, -1);
-      else if(!bleeding) this.props.heroFury(heroId, 1);
+      else if (!bleeding) this.props.heroFury(heroId, 1);
 
       if (damage > 0) {
         if (poison) {
-          this.props.heroAltered({ id: heroId, poisoning: poison, burning: null, bleeding: null });
+          this.props.heroAltered({
+            id: heroId,
+            poisoning: poison,
+            burning: null,
+            bleeding: null
+          });
         }
         if (burn) {
-          this.props.heroAltered({ id: heroId, poisoning: null, burning: burn, bleeding: null });
+          this.props.heroAltered({
+            id: heroId,
+            poisoning: null,
+            burning: burn,
+            bleeding: null
+          });
         }
         if (bleeding) {
-          this.props.heroAltered({ id: heroId, poisoning: null, burning: null, bleeding: bleeding });
+          this.props.heroAltered({
+            id: heroId,
+            poisoning: null,
+            burning: null,
+            bleeding: bleeding
+          });
         }
 
         this.props.heroDamage(heroId, damage);
@@ -131,46 +155,36 @@ class HeroScreen extends React.Component {
     }
   };
 
-  deleteHero = (options) => {
+  deleteHero = options => {
     const { navigate } = this.props.navigation;
     const heroId = this.props.navigation.getParam("heroId", "NO-ID");
-    if(options.deleteThisEntity) {
+    if (options.deleteThisEntity) {
       navigate("Main");
     }
-    this.props.deleteHero(heroId,options);
+    this.props.deleteHero(heroId, options);
   };
 
-  submitPercentDamage = (percent) => {
+  submitPercentDamage = percent => {
     const heroId = this.props.navigation.getParam("heroId", "NO-ID");
     const hero = this.props.heroes.find(hero => hero.id == heroId);
     const damage = Math.ceil((hero.hp * percent) / 100);
     if (damage > 0) {
       this.props.heroDamage(heroId, damage);
     }
-  }
+  };
 
   submitPoison = () => {
-    const heroId = this.props.navigation.getParam("heroId", "NO-ID");
-    const hero = this.props.heroes.find(hero => hero.id == heroId);
-    const damage = Math.ceil((hero.hp * 10) / 100);
-    if (damage > 0) {
-      this.props.heroDamage(heroId, damage);
-    }
+    this.submitPercentDamage(15)
   };
 
   submitBurning = () => {
-    const heroId = this.props.navigation.getParam("heroId", "NO-ID");
-    const hero = this.props.heroes.find(hero => hero.id == heroId);
-    const damage = Math.ceil((hero.hp * 15) / 100);
-    if (damage > 0) {
-      this.props.heroDamage(heroId, damage);
-    }
+    this.submitPercentDamage(10)
   };
 
-  handleFury = (val) => {
+  handleFury = val => {
     const heroId = this.props.navigation.getParam("heroId", "NO-ID");
     this.props.heroFury(heroId, val);
-  }
+  };
 
   submitMana = mp_using => {
     const heroId = this.props.navigation.getParam("heroId", "NO-ID");
@@ -253,7 +267,13 @@ class HeroScreen extends React.Component {
             >
               <Image
                 source={image}
-                style={{ height: "100%", resizeMode: "contain", width: null, aspectRatio: 1, backgroundColor: "white" }}
+                style={{
+                  height: "100%",
+                  resizeMode: "contain",
+                  width: null,
+                  aspectRatio: 1,
+                  backgroundColor: "white"
+                }}
               />
               <View
                 style={{
@@ -267,10 +287,26 @@ class HeroScreen extends React.Component {
                 <Text style={styles.text}>
                   {label}, {subclass}
                 </Text>
-                <Text allowFontScaling={true} numberOfLines={3} style={styles.buttonText}> {description} </Text><TouchableOpacity onPress={() => this.toggleDescriptionModal(!this.state.isDescriptionVisible)}><Text style={styles.buttonText}>Mostra Altro</Text></TouchableOpacity>
+                <Text
+                  allowFontScaling={true}
+                  numberOfLines={3}
+                  style={styles.buttonText}
+                >
+                  {" "}
+                  {description}{" "}
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.toggleDescriptionModal(
+                      !this.state.isDescriptionVisible
+                    )
+                  }
+                >
+                  <Text style={styles.buttonText}>Mostra Altro</Text>
+                </TouchableOpacity>
               </View>
             </View>
-            
+
             <View
               style={{
                 flex: 1,
@@ -286,7 +322,11 @@ class HeroScreen extends React.Component {
                 <Health
                   curr_hp={hero.curr_hp}
                   hp={hero.hp}
-                  submitPercentDamage={subclass === "Berserker" ? this.submitPercentDamage : undefined}
+                  submitPercentDamage={
+                    subclass === "Berserker"
+                      ? this.submitPercentDamage
+                      : undefined
+                  }
                   poisoning={hero.poisoning}
                   burning={hero.burning}
                   submitPoison={this.submitPoison}
@@ -305,7 +345,11 @@ class HeroScreen extends React.Component {
               <View
                 style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
               >
-                <Defence curr_def={hero.curr_def} def={hero.def} />
+                <Defence
+                  curr_def={hero.curr_def}
+                  def={hero.def}
+                  submitBonusMalus={this.submitBonusMalus}
+                />
               </View>
               <View
                 style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
@@ -321,7 +365,7 @@ class HeroScreen extends React.Component {
             </View>
           </View>
 
-          {/*Parte dei quattro bottoni*/}
+          {/*Parte dei tre bottoni*/}
           <View
             style={{
               flex: 1,
@@ -360,16 +404,6 @@ class HeroScreen extends React.Component {
             >
               <Text style={styles.buttonText}>Status Alterati</Text>
             </Button>
-
-            <Button
-              block
-              style={styles.button}
-              onPress={() =>
-                this.toggleBonusMalusModal(!this.state.isBonusMalusVisible)
-              }
-            >
-              <Text style={styles.buttonText}>Bonus/Malus</Text>
-            </Button>
           </View>
         </View>
         {this.state.isDamageVisible && (
@@ -399,11 +433,6 @@ class HeroScreen extends React.Component {
           mana
         />
 
-        <BonusMalusPopup
-          submitBonusMalus={this.submitBonusMalus}
-          toggleFunction={this.toggleBonusMalusModal}
-          isVisible={this.state.isBonusMalusVisible}
-        />
         {this.state.isEditHeroVisible && (
           <EditHeroPopup
             heroHp={hero.hp.toString()}

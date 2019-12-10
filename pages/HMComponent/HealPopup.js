@@ -1,16 +1,6 @@
 import React from "react";
 import { TextInput } from "react-native";
-import {
-  Icon,
-  Item,
-  ListItem,
-  Form,
-  Text,
-  CheckBox,
-  Body,
-  View,
-  Picker
-} from "native-base";
+import { Icon, Item, ListItem, Form, Text, CheckBox, Body } from "native-base";
 import Popup from "../../components/Popup";
 
 class HealPopup extends React.PureComponent {
@@ -49,7 +39,7 @@ class HealPopup extends React.PureComponent {
       hp_heal: null,
       mp_heal: null,
       total_heal: false,
-      half_heal: false,
+      half_heal: false
     });
   };
 
@@ -63,12 +53,13 @@ class HealPopup extends React.PureComponent {
         cancelFunction={this.cancelFunction}
         toggleFunction={this.props.toggleFunction}
         width="25%"
-        title="Cura">
+        title="Cura"
+      >
         <Form style={{ flex: 1, borderTopColor: "#DCDCDC", borderTopWidth: 1 }}>
           <Item style={{ flex: 1 }}>
             <Icon active name="beaker" style={{ color: "red" }} />
             <TextInput
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               disableFullscreenUI={true}
               returnKeyType="next"
               allowFontScaling={true}
@@ -83,7 +74,7 @@ class HealPopup extends React.PureComponent {
             <Item style={{ flex: 1 }}>
               <Icon active name="beaker" style={{ color: "#faad14" }} />
               <TextInput
-                style={{flex: 1}}
+                style={{ flex: 1 }}
                 disableFullscreenUI={true}
                 returnKeyType="done"
                 allowFontScaling={true}

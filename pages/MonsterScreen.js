@@ -10,7 +10,6 @@ import DamagePopup from "./HMComponent/DamagePopup";
 import DeletePopup from "./HMComponent/DeleteMonsterPopup";
 import HealPopup from "./HMComponent/HealPopup";
 import AlteredStatusPopup from "./HMComponent/AlteredStatusPopup";
-import BonusMalusPopup from "./HMComponent/BonusMalusPopup";
 import {
   deleteMonster,
   monsterDamage,
@@ -28,8 +27,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    deleteMonster: (key, options) =>
-      dispatch(deleteMonster(key, options)),
+    deleteMonster: (key, options) => dispatch(deleteMonster(key, options)),
     monsterDamage: (id, damage) => dispatch(monsterDamage(id, damage)),
     monsterHeal: monster_heal => dispatch(monsterHeal(monster_heal)),
     monsterAltered: monster_altered =>
@@ -45,7 +43,6 @@ class MonsterScreen extends React.Component {
       isDamageVisible: false,
       isHealVisible: false,
       isAlteredStatusVisible: false,
-      isBonusMalusVisible: false,
       isDeleteMonsterVisible: false
     };
   }
@@ -59,10 +56,6 @@ class MonsterScreen extends React.Component {
   toggleAlteredStatusModal = visibility => {
     this.setState({ isAlteredStatusVisible: visibility });
   };
-  toggleBonusMalusModal = visibility => {
-    this.setState({ isBonusMalusVisible: visibility });
-  };
-
   toggleDeleteMonster = () => {
     this.setState(prevState => ({
       isDeleteMonsterVisible: !prevState.isDeleteMonsterVisible
@@ -102,33 +95,33 @@ class MonsterScreen extends React.Component {
     }
   };
 
-  submitPoison = () => {
+  
+  submitPercentDamage = percent => {
     const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
     const monster = this.props.monsters[monsterKey];
-    const damage = Math.ceil((monster.hp * 10) / 100);
+    const damage = Math.ceil((monster.hp * percent) / 100);
     if (damage > 0) {
       this.props.monsterDamage(monsterKey, damage);
     }
+  };
+
+  submitPoison = () => {
+    this.submitPercentDamage(15)
   };
 
   submitBurning = () => {
-    const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
-    const monster = this.props.monsters[monsterKey];
-    const damage = Math.ceil((monster.hp * 15) / 100);
-    if (damage > 0) {
-      this.props.monsterDamage(monsterKey, damage);
-    }
+    this.submitPercentDamage(10)
   };
 
-  deleteMonster = (options) => {
+
+  deleteMonster = options => {
     const { navigate } = this.props.navigation;
     const monsterKey = this.props.navigation.getParam("monsterKey", "NO-ID");
-    if(options.deleteAllDead) {
+    if (options.deleteAllDead) {
       const monster = this.props.monsters[monsterKey];
-      if(monster.curr_hp === 0)
-        navigate("Main");
+      if (monster.curr_hp === 0) navigate("Main");
     }
-    if(options.deleteThisMonster) {
+    if (options.deleteThisMonster) {
       navigate("Main");
     }
     this.props.deleteMonster(monsterKey, options);
@@ -209,9 +202,7 @@ class MonsterScreen extends React.Component {
                   flexDirection: "column"
                 }}
               >
-                <Text style={styles.text}>
-                  {label}
-                </Text>
+                <Text style={styles.text}>{label}</Text>
                 <Text style={styles.buttonText}> --Descrizione </Text>
               </View>
             </View>
@@ -240,7 +231,11 @@ class MonsterScreen extends React.Component {
               <View
                 style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
               >
-                <Defence curr_def={monster.curr_def} def={monster.def} />
+                <Defence
+                  curr_def={monster.curr_def}
+                  def={monster.def}
+                  submitBonusMalus={this.submitBonusMalus}
+                />
               </View>
               <View
                 style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
@@ -289,16 +284,6 @@ class MonsterScreen extends React.Component {
             >
               <Text style={styles.buttonText}>Status Alterati</Text>
             </Button>
-
-            <Button
-              block
-              style={styles.button}
-              onPress={() =>
-                this.toggleBonusMalusModal(!this.state.isBonusMalusVisible)
-              }
-            >
-              <Text style={styles.buttonText}>Bonus/Malus</Text>
-            </Button>
           </View>
         </View>
         {this.state.isDamageVisible && (
@@ -322,12 +307,6 @@ class MonsterScreen extends React.Component {
           submitHeal={this.submitHeal}
           toggleFunction={this.toggleHealModal}
           isVisible={this.state.isHealVisible}
-        />
-
-        <BonusMalusPopup
-          submitBonusMalus={this.submitBonusMalus}
-          toggleFunction={this.toggleBonusMalusModal}
-          isVisible={this.state.isBonusMalusVisible}
         />
 
         {this.state.isDeleteMonsterVisible && (

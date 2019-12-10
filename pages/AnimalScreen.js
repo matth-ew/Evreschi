@@ -9,7 +9,6 @@ import Defence from "./HMComponent/Defence";
 import Fury from "./HMComponent/Fury";
 import DamagePopup from "./HMComponent/DamagePopup";
 import HealPopup from "./HMComponent/HealPopup";
-import BonusMalusPopup from "./HMComponent/BonusMalusPopup";
 import DeletePopup from "./HMComponent/DeletePopup";
 import {
   deleteAnimal,
@@ -28,7 +27,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    deleteAnimal: (id,options) => dispatch(deleteAnimal(id,options)),
+    deleteAnimal: (id, options) => dispatch(deleteAnimal(id, options)),
     animalDamage: (id, damage) => dispatch(animalDamage(id, damage)),
     animalHeal: animal_heal => dispatch(animalHeal(animal_heal)),
     animalFury: (id, value) => dispatch(animalFury(id, value)),
@@ -42,7 +41,6 @@ class AnimalScreen extends React.Component {
     this.state = {
       isDamageVisible: false,
       isHealVisible: false,
-      isBonusMalusVisible: false,
       isDeleteAnimalVisible: false
     };
   }
@@ -55,9 +53,6 @@ class AnimalScreen extends React.Component {
   };
   toggleHealModal = visibility => {
     this.setState({ isHealVisible: visibility });
-  };
-  toggleBonusMalusModal = visibility => {
-    this.setState({ isBonusMalusVisible: visibility });
   };
 
   toggleDeleteAnimal = () => {
@@ -86,13 +81,13 @@ class AnimalScreen extends React.Component {
     }
   };
 
-  deleteAnimal = (options) => {
+  deleteAnimal = options => {
     const { navigate } = this.props.navigation;
     const animalId = this.props.navigation.getParam("animalId", "NO-ID");
-    if(options.deleteThisEntity) {
+    if (options.deleteThisEntity) {
       navigate("Main");
     }
-    this.props.deleteAnimal(animalId,options);
+    this.props.deleteAnimal(animalId, options);
   };
 
   submitHeal = (total_heal, half_heal, hp_heal) => {
@@ -100,10 +95,10 @@ class AnimalScreen extends React.Component {
     this.props.animalHeal({ id: animalId, total_heal, half_heal, hp_heal });
   };
 
-  handleFury = (val) => {
+  handleFury = val => {
     const animalId = this.props.navigation.getParam("animalId", "NO-ID");
     this.props.animalFury(animalId, val);
-  }
+  };
 
   submitFury = () => {
     const animalId = this.props.navigation.getParam("animalId", "NO-ID");
@@ -196,7 +191,11 @@ class AnimalScreen extends React.Component {
               <View
                 style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
               >
-                <Defence curr_def={animal.curr_def} def={animal.def} />
+                <Defence
+                  curr_def={animal.curr_def}
+                  def={animal.def}
+                  submitBonusMalus={this.submitBonusMalus}
+                />
               </View>
               <View
                 style={{ flex: 1, paddingTop: "10%", flexDirection: "row" }}
@@ -241,16 +240,6 @@ class AnimalScreen extends React.Component {
             >
               <Text style={styles.buttonText}>Cura</Text>
             </Button>
-
-            <Button
-              block
-              style={styles.button}
-              onPress={() =>
-                this.toggleBonusMalusModal(!this.state.isBonusMalusVisible)
-              }
-            >
-              <Text style={styles.buttonText}>Bonus/Malus</Text>
-            </Button>
           </View>
         </View>
 
@@ -269,15 +258,9 @@ class AnimalScreen extends React.Component {
           isVisible={this.state.isHealVisible}
         />
 
-        <BonusMalusPopup
-          submitBonusMalus={this.submitBonusMalus}
-          toggleFunction={this.toggleBonusMalusModal}
-          isVisible={this.state.isBonusMalusVisible}
-        />
-
         {this.state.isDeleteAnimalVisible && (
           <DeletePopup
-            curr_hp = {animal.curr_hp}
+            curr_hp={animal.curr_hp}
             submitFunction={this.deleteAnimal}
             toggleFunction={this.toggleDeleteAnimal}
             isVisible={this.state.isDeleteAnimalVisible}

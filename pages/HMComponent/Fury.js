@@ -90,47 +90,45 @@ class Fury extends React.PureComponent {
             justifyContent: "flex-start"
           }}
         >
-        <TouchableOpacity style={{ flex: 1, marginLeft: "5%" }}
-              onPress={() => {
-                this.props.handleFury?.(-1);
-              }}>
-              <View
-                style={{
-                  backgroundColor: "white",
-                  height: "100%",
-                  aspectRatio: 1,
-                  borderRadius: 9999,
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <Image
-                  style={{ height: "60%", aspectRatio: 1 }}
-                  source={minus}
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ flex: 1, marginLeft: "5%" }}
-              onPress={() => {
-                this.props.handleFury?.(+1);
-              }}>
-              <View
-                style={{
-                  backgroundColor: "white",
-                  height: "100%",
-                  aspectRatio: 1,
-                  borderRadius: 9999,
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <Image
-                  style={{ height: "60%", aspectRatio: 1 }}
-                  source={plus}
-                />
-              </View>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flex: 1, marginLeft: "5%" }}
+            onPress={() => {
+              this.props.handleFury?.(-1);
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "white",
+                height: "100%",
+                aspectRatio: 1,
+                borderRadius: 9999,
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <Image style={{ height: "60%", aspectRatio: 1 }} source={minus} />
             </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flex: 1, marginLeft: "5%" }}
+            onPress={() => {
+              this.props.handleFury?.(+1);
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "white",
+                height: "100%",
+                aspectRatio: 1,
+                borderRadius: 9999,
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <Image style={{ height: "60%", aspectRatio: 1 }} source={plus} />
+            </View>
+          </TouchableOpacity>
+        </View>
         {/*Sanguinamento*/}
         <View
           style={{

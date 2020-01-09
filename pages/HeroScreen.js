@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { View, Button, Text } from "native-base";
-import LeftRightBar from "../components/LeftRightBar";
+import RightBarContainer from "../components/RightBarContainer";
 import { connect } from "react-redux";
 import heroesList from "../components/heroes-list";
 import {
@@ -228,7 +228,7 @@ class HeroScreen extends React.Component {
     const hero = this.props.heroes.find(hero => hero.id == heroId);
     const { image, label, subclass, description } = heroesList.heroes[heroId];
     return (
-      <LeftRightBar
+      <RightBarContainer
         navigation={this.props.navigation}
         editFunction={this.toggleEditHero}
         deleteFunction={this.toggleDeleteHero}
@@ -298,7 +298,7 @@ class HeroScreen extends React.Component {
                 <TouchableOpacity
                   onPress={() =>
                     this.toggleDescriptionModal(
-                      !this.state.isDescriptionVisible
+                      true
                     )
                   }
                 >
@@ -464,7 +464,7 @@ class HeroScreen extends React.Component {
           toggleFunction={this.toggleAnimal}
           isVisible={this.state.isAnimalVisible}
         />
-      </LeftRightBar>
+      </RightBarContainer>
     );
   }
 }

@@ -1,15 +1,19 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Text, View } from "native-base";
-import LeftRightBar from "../components/LeftRightBar";
+import RightBarContainer from "../components/RightBarContainer";
 import { connect } from "react-redux";
 import monstersList from "../components/monsters-list";
-import Health from "./HMComponent/Health";
-import Defence from "./HMComponent/Defence";
-import DamagePopup from "./HMComponent/DamagePopup";
-import DeletePopup from "./HMComponent/DeleteMonsterPopup";
-import HealPopup from "./HMComponent/HealPopup";
-import AlteredStatusPopup from "./HMComponent/AlteredStatusPopup";
+
+import {
+  Health,
+  Defence,
+  DamagePopup,
+  HealPopup,
+  AlteredStatusPopup,
+  DeleteMonsterPopup as DeletePopup,
+  DescriptionPopup
+} from "./HMComponent";
 import {
   deleteMonster,
   monsterDamage,
@@ -43,7 +47,8 @@ class MonsterScreen extends React.Component {
       isDamageVisible: false,
       isHealVisible: false,
       isAlteredStatusVisible: false,
-      isDeleteMonsterVisible: false
+      isDeleteMonsterVisible: false,
+      isDescriptionVisible: false
     };
   }
 
@@ -60,6 +65,9 @@ class MonsterScreen extends React.Component {
     this.setState(prevState => ({
       isDeleteMonsterVisible: !prevState.isDeleteMonsterVisible
     }));
+  };
+  toggleDescriptionModal = visibility => {
+    this.setState({ isDescriptionVisible: visibility });
   };
 
   submitDamage = (dice, multiplier, critical, withoutDefence, poison, burn) => {
@@ -152,9 +160,9 @@ class MonsterScreen extends React.Component {
     const monsterId = navigation.getParam("monsterId", "NO-ID");
     const monsterKey = navigation.getParam("monsterKey", "NO-ID");
     const monster = this.props.monsters[monsterKey];
-    const { image, label } = monstersList.monsters[monsterId];
+    const { image, label, description } = monstersList.monsters[monsterId];
     return (
-      <LeftRightBar
+      <RightBarContainer
         navigation={this.props.navigation}
         deleteFunction={this.toggleDeleteMonster}
       >
@@ -203,7 +211,23 @@ class MonsterScreen extends React.Component {
                 }}
               >
                 <Text style={styles.text}>{label}</Text>
-                <Text style={styles.buttonText}> --Descrizione </Text>
+                <Text
+                  allowFontScaling={true}
+                  numberOfLines={3}
+                  style={styles.buttonText}
+                >
+                  {" "}
+                  {description}{" "}
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.toggleDescriptionModal(
+                      true
+                    )
+                  }
+                >
+                  <Text style={styles.buttonText}>Mostra Altro</Text>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -317,7 +341,15 @@ class MonsterScreen extends React.Component {
             isVisible={this.state.isDeleteMonsterVisible}
           />
         )}
-      </LeftRightBar>
+        {this.state.isDescriptionVisible && (
+          <DescriptionPopup
+            title={label}
+            description={description}
+            toggleFunction={this.toggleDescriptionModal}
+            isVisible={this.state.isDescriptionVisible}
+          />
+        )}
+      </RightBarContainer>
     );
   }
 }

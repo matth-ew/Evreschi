@@ -27,5 +27,8 @@
     "babel-preset-expo": "^5.1.1",
     "redux-logger": "^3.0.6"
   },
+  "eslintConfig": {
+    "extends": "universe/native"
+  },
   "private": true
 }

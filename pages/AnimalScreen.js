@@ -1,15 +1,18 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Text, View } from "native-base";
-import LeftRightBar from "../components/LeftRightBar";
+import RightBarContainer from "../components/RightBarContainer";
 import { connect } from "react-redux";
 import animalsList from "../components/animals-list";
-import Health from "./HMComponent/Health";
-import Defence from "./HMComponent/Defence";
-import Fury from "./HMComponent/Fury";
-import DamagePopup from "./HMComponent/DamagePopup";
-import HealPopup from "./HMComponent/HealPopup";
-import DeletePopup from "./HMComponent/DeletePopup";
+import {
+  Health,
+  Defence,
+  Fury,
+  DamagePopup,
+  HealPopup,
+  DeletePopup,
+  DescriptionPopup
+} from "./HMComponent";
 import {
   deleteAnimal,
   animalDamage,
@@ -41,7 +44,8 @@ class AnimalScreen extends React.Component {
     this.state = {
       isDamageVisible: false,
       isHealVisible: false,
-      isDeleteAnimalVisible: false
+      isDeleteAnimalVisible: false,
+      isDescriptionVisible: false
     };
   }
 
@@ -59,6 +63,9 @@ class AnimalScreen extends React.Component {
     this.setState(prevState => ({
       isDeleteAnimalVisible: !prevState.isDeleteAnimalVisible
     }));
+  };
+  toggleDescriptionModal = visibility => {
+    this.setState({ isDescriptionVisible: visibility });
   };
 
   submitDamage = (dice, multiplier, critical, withoutDefence) => {
@@ -119,9 +126,9 @@ class AnimalScreen extends React.Component {
     const { navigate } = navigation;
     const animalId = navigation.getParam("animalId", "NO-ID");
     const animal = this.props.animals.find(animal => animal.id == animalId);
-    const { image, label } = animalsList.animals[animalId];
+    const { image, label, description } = animalsList.animals[animalId];
     return (
-      <LeftRightBar
+      <RightBarContainer
         navigation={this.props.navigation}
         deleteFunction={this.toggleDeleteAnimal}
       >
@@ -170,7 +177,23 @@ class AnimalScreen extends React.Component {
                 }}
               >
                 <Text style={styles.text}>{label}</Text>
-                <Text style={styles.buttonText}> --Descrizione </Text>
+                <Text
+                  allowFontScaling={true}
+                  numberOfLines={3}
+                  style={styles.buttonText}
+                >
+                  {" "}
+                  {description}{" "}
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.toggleDescriptionModal(
+                      true
+                    )
+                  }
+                >
+                  <Text style={styles.buttonText}>Mostra Altro</Text>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -266,7 +289,15 @@ class AnimalScreen extends React.Component {
             isVisible={this.state.isDeleteAnimalVisible}
           />
         )}
-      </LeftRightBar>
+        {this.state.isDescriptionVisible && (
+          <DescriptionPopup
+            title={label}
+            description={description}
+            toggleFunction={this.toggleDescriptionModal}
+            isVisible={this.state.isDescriptionVisible}
+          />
+        )}
+      </RightBarContainer>
     );
   }
 }

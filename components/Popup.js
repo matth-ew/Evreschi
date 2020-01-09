@@ -48,6 +48,7 @@ class Popup extends React.PureComponent {
           transparent={true}
           animationType="fade"
         >
+          {this.props.inTheModal && this.props.inTheModal}
           <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
             <View
               style={{

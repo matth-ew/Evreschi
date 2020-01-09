@@ -10,7 +10,7 @@ import {
   View,
   H2
 } from "native-base";
-import LeftRightBar from "../../components/LeftRightBar";
+import RightBarContainer from "../../components/RightBarContainer";
 import AddMonsterPopup from "./AddMonsterPopup";
 import monstersList from "../../components/monsters-list";
 import { connect } from "react-redux";
@@ -194,7 +194,7 @@ class AddMonster extends React.PureComponent {
 
     if (dungeon_level != null && !hero_levels.some(x => x == null)) {
       return (
-        <LeftRightBar navigation={this.props.navigation}>
+        <RightBarContainer navigation={this.props.navigation}>
           <Tabs tabBarUnderlineStyle={{ borderBottomWidth: 2 }}>
             <Tab
               heading={
@@ -318,11 +318,11 @@ class AddMonster extends React.PureComponent {
               right: 10
             }}
           />
-        </LeftRightBar>
+        </RightBarContainer>
       );
     } else {
       return (
-        <LeftRightBar navigation={this.props.navigation}>
+        <RightBarContainer navigation={this.props.navigation}>
           <View style={{ flex: 1, flexDirection: "row", margin: "5%" }}>
             <H2 style={{ flex: 9, color: "white" }}>
               Per poter inserire i mostri è necessario aggiungere le
@@ -332,7 +332,7 @@ class AddMonster extends React.PureComponent {
               <Icon name="arrow-forward" color="white" size={35} />
             </View>
           </View>
-        </LeftRightBar>
+        </RightBarContainer>
       );
     }
   }

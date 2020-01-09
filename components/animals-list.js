@@ -8,12 +8,12 @@ import tigre from '../assets/animals/Tigre.jpg'
 
 const animalsList = {
   animals:{
-    'animal-1': {id: 'animal-1', label: 'Lupo', image: lupo },
-    'animal-2': {id: 'animal-2', label: 'Orso', image: orso },
-    'animal-3': {id: 'animal-3', label: 'Gorilla', image: gorilla },
-    'animal-4': {id: 'animal-4', label: 'Aquila', image: aquila },
-    'animal-5': {id: 'animal-5', label: 'Pantera', image: pantera },
-    'animal-6': {id: 'animal-6', label: 'Tigre', image: tigre },
+    'animal-1': {id: 'animal-1', label: 'Lupo', image: lupo, description: 'Animale del ranger, agile e scattante. Si nasconde nella vegetazione e, al segnale del suo padrone, conduce attacchi alle prede ignare del pericolo. Il suo fiuto eccellente e la sua vista acuta lo rendono un fido compagno per la caccia.' },
+    'animal-2': {id: 'animal-2', label: 'Orso', image: orso, description: 'Animale del ranger, fedele ed affamato. Si lascia cavalcare dal suo padrone, combatte al suo fianco e non teme lo scontro faccia a faccia. Quando il cibo scarseggia va a pesca nei laghi o nei fiumi e riporta le prede all’accampamento per farle cucinare.' },
+    'animal-3': {id: 'animal-3', label: 'Gorilla', image: gorilla, description: 'Animale del ranger, possente e protettivo. Con il solo battere dei pugni sul petto fa cadere le foglie dagli alberi e mette in fuga gli animali nelle zone circostanti. Assieme al suo padrone formano una coppia affiatata e sinergica, pronta a qualsiasi avversario.' },
+    'animal-4': {id: 'animal-4', label: 'Aquila', image: aquila, description: 'Animale del ranger, leggiadra e fedele. Non lascia mai il suo padrone seguendolo dall’alto con il suo sguardo acuto, non essendo dotata di una forza elevata sfrutta l’altezza per sferrare attacchi improvvisi al nemico.' },
+    'animal-5': {id: 'animal-5', label: 'Pantera', image: pantera, description: 'Animale del ranger, furtiva e rapida. La maggior parte dei nemici non la vede neppure arrivare, si muove saltando tra gli arbusti e si fionda sul malcapitato direttamente dai rami degli alberi. Durante la notte fa la guardia al suo padrone e se sente qualche rumore sinistro allontana l’intruso semplicemente con il suo terrificante ruggito.' },
+    'animal-6': {id: 'animal-6', label: 'Tigre', image: tigre, description: 'Animale del ranger, aggressiva e mortale. Un devastante mix di ferocia e velocità, se si ha la sfortuna di finire nelle sue mire non vi è via di scampo. Non accetta ordini da nessuno al di fuori del suo padrone, che adora al punto di diventarne partner insostituibile.' },
   },
   levels:{
     'level-0': {id: 'level-0', label: 'Livello 0', animals: {	'animal-1': { pv:	10	, def: 	1	}, 'animal-2': { pv: 	30	, def: 	3	}, 'animal-3': { pv: 	80	, def: 	5	}, 'animal-4': { pv: 	9	, def: 	1	}, 'animal-5': { pv: 	20	, def: 	2	}, 'animal-6': { pv: 	40	, def: 	3	}, }},

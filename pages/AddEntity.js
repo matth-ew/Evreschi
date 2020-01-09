@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Button, Icon, Text, H3, Container } from "native-base";
 import { Button as ElButton, Icon as ElIcon } from "react-native-elements";
-import LeftRightBar from "../components/LeftRightBar";
+import RightBarContainer from "../components/RightBarContainer";
 import { styles } from "../components/Styles";
 
 class AddEntity extends React.Component {
@@ -15,7 +15,7 @@ class AddEntity extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-        <LeftRightBar navigation={this.props.navigation}>
+        <RightBarContainer navigation={this.props.navigation}>
             <View style={styles.overlay}>
               <H3 style={{ flex: 1, marginVertical: "5%" }}>
                 Cosa vuoi aggiungere?
@@ -71,7 +71,7 @@ class AddEntity extends React.Component {
               navigate("Main");
             }}
           />
-        </LeftRightBar>
+        </RightBarContainer>
     );
   }
 }

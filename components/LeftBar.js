@@ -2,7 +2,6 @@ import React from "react";
 import {
   View,
   ScrollView,
-  PanResponder,
 } from "react-native";
 import { Avatar } from "react-native-elements";
 import { connect } from "react-redux";
@@ -20,13 +19,26 @@ const mapStateToProps = state => {
 };
 
 class LeftBar extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selected: null,
+      selectedKey: null,
+    };
+  }
 
+  handleSelected = (id,key) => {
+    this.setState({
+      selected: id,
+      selectedKey: key,
+    })
+  }
   
   renderHeroes = () => {
     const { navigate } = this.props.navigation;
     const heroes = this.props.heroes;
-    const selectedHero = this.props.navigation.getParam("heroId");
-
+    const {selected} = this.state;
+    //const selectedHero = this.props.navigation.getParam("heroId");
     return heroes.map(hero => {
       let hero_image = heroesList.heroes[hero.id].head_image;
       return (
@@ -35,9 +47,10 @@ class LeftBar extends React.PureComponent {
           key={hero.id}
           image={hero_image}
           keyProp={null}
-          selected={hero.id === selectedHero}
+          selected={hero.id === selected}
           onClickFunction={() => {
             navigate("Hero", { heroId: hero.id });
+            this.handleSelected(hero.id);
           }}
         />
       );
@@ -47,7 +60,8 @@ class LeftBar extends React.PureComponent {
   renderAnimals = () => {
     const { navigate } = this.props.navigation;
     const animals = this.props.animals;
-    const selectedAnimal = this.props.navigation.getParam("animalId");
+    const {selected} = this.state;
+    //const selectedAnimal = this.props.navigation.getParam("animalId");
 
     return animals.map(animal => {
       let animal_image = animalsList.animals[animal.id].image;
@@ -57,9 +71,10 @@ class LeftBar extends React.PureComponent {
           key={animal.id}
           image={animal_image}
           keyProp={null}
-          selected={animal.id === selectedAnimal}
+          selected={animal.id === selected}
           onClickFunction={() => {
             navigate("Animal", { animalId: animal.id });
+            this.handleSelected(animal.id);
           }}
         />
       );
@@ -69,8 +84,9 @@ class LeftBar extends React.PureComponent {
   renderMonsters = () => {
     const { navigate } = this.props.navigation;
     const monsters = this.props.monsters;
-    const selectedMonsterId = this.props.navigation.getParam("monsterId");
-    const selectedMonsterKey = this.props.navigation.getParam("monsterKey");
+    const {selected,selectedKey} = this.state;
+    //const selectedMonsterId = this.props.navigation.getParam("monsterId");
+    //const selectedMonsterKey = this.props.navigation.getParam("monsterKey");
 
     return monsters.map((monster, i) => {
       let monster_image = monstersList.monsters[monster.id].image;
@@ -81,10 +97,11 @@ class LeftBar extends React.PureComponent {
           image={monster_image}
           keyProp={i}
           selected={
-            monster.id === selectedMonsterId && i === selectedMonsterKey
+            monster.id === selected && i === selectedKey
           }
           onClickFunction={() => {
             navigate("Monster", { monsterId: monster.id, monsterKey: i });
+            this.handleSelected(monster.id,i);
           }}
         />
       );
@@ -132,6 +149,7 @@ class LeftBar extends React.PureComponent {
           overlayContainerStyle={{ backgroundColor: "white" }}
           onPress={() => {
             navigate("AddEntity");
+            this.setState({selected: null});
           }}
           activeOpacity={0.7}
           rounded

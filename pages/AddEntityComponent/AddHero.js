@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, Image } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { Text, Tab, Tabs, TabHeading, View} from "native-base";
-import LeftRightBar from "../../components/LeftRightBar";
+import RightBarContainer from "../../components/RightBarContainer";
 import AddHeroStats from "./AddHeroStats";
 import heroesList from "../../components/heroes-list";
 import { connect } from "react-redux";
@@ -91,7 +91,7 @@ class AddHero extends React.PureComponent {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <LeftRightBar navigation={this.props.navigation}>
+      <RightBarContainer navigation={this.props.navigation}>
         <Tabs tabBarUnderlineStyle={{ borderBottomWidth: 2 }}>
           <Tab
             heading={
@@ -199,7 +199,7 @@ class AddHero extends React.PureComponent {
               right: 10,
             }}
           />*/}
-      </LeftRightBar>
+      </RightBarContainer>
     );
   }
 }

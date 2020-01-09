@@ -1,7 +1,16 @@
 import React from "react";
-import { View, TextInput } from "react-native";
+import { Keyboard, View, Text, TextInput } from "react-native";
 import { Icon, Item, Form } from "native-base";
 import Popup from "../../components/Popup";
+
+/*
+
+//(*) Esperimento Tastierino numerico
+
+import DraggableKeyboard from "../../components/DraggableKeyboard";
+
+Keyboard.dismiss()
+*/
 
 class AddHeroStats extends React.PureComponent {
   constructor(props) {
@@ -9,7 +18,8 @@ class AddHeroStats extends React.PureComponent {
     this.state = {
       heroHp: null,
       heroMp: null,
-      heroDef: null
+      heroDef: null,
+      //(*)isKeyboardVisible: false,
     };
   }
 
@@ -72,15 +82,19 @@ class AddHeroStats extends React.PureComponent {
         backText="Annulla"
         flex={3}
         title="Aggiungi Eroe"
+        //(*)inTheModal={this.state.isKeyboardVisible && <DraggableKeyboard/>}
+        //(*)atModalRight={this.state.isKeyboardVisible && <DraggableKeyboard/>}
       >
         <Form style={{ flex: 1 }}>
           <Item style={{ flex: 1 }}>
+          {/*(*) <Item style={{ flex: 1 }} onPress={() => this.setState({isKeyboardVisible: true})}>*/}
             <Icon
               active
               name="heart"
               type="MaterialCommunityIcons"
               style={{ color: "red" }}
             />
+            {/*(*)<Text*/}
             <TextInput
               ref="hpRef"
               disableFullscreenUI={true}
@@ -92,6 +106,7 @@ class AddHeroStats extends React.PureComponent {
               style={{ flex: 1 }}
               onSubmitEditing={() => this.refs.mpRef.focus()}
             />
+              {/*(*)onPress={() => this.setState({isKeyboardVisible: true})}*/}
           </Item>
           <Item style={{ flex: 1 }}>
             <Icon

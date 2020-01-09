@@ -1,6 +1,5 @@
-import React from "react";
 import { createAppContainer,createSwitchNavigator } from "react-navigation";
-import { createSidebarNavigator } from './SidebarTabNavigator';
+import createSidebarNavigator from './SidebarTabNavigator';
 
 import {
   HomeScreen,
@@ -30,15 +29,31 @@ const AddEntityNavigator = createSwitchNavigator(
   }
 );
 
-//let sidebarNavigator = createSidebarNavigator(
-let sidebarNavigator = createSwitchNavigator(
+const MainNavigator = createSidebarNavigator(
   {
-    Home: { screen: HomeScreen },
     Main: { screen: MainScreen },
     Hero: { screen: HeroScreen },
     Animal: { screen: AnimalScreen },
     Monster: { screen: MonsterScreen },
     AddEntity: { screen: AddEntityNavigator }
+  },
+  {
+    initialRouteName: "Main",
+    //initialRouteName: "Main", // TEST
+    animationEnabled: false,
+    swipeEnabled: false,
+    headerMode: "none",
+    navigationOptions: {
+      headerVisible: false
+    }
+  }
+);
+
+//let sidebarNavigator = createSidebarNavigator(
+let sidebarNavigator = createSwitchNavigator(
+  {
+    Home: { screen: HomeScreen },
+    Main: { screen: MainNavigator },
   },
   {
     initialRouteName: "Home",

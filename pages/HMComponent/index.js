@@ -12,4 +12,18 @@ import DeletePopup from "./DeletePopup";
 import DeleteMonsterPopup from "./DeleteMonsterPopup";
 import DescriptionPopup from "./DescriptionPopup";
 
-export {Health,Defence,Mana,Fury,DamagePopup,HealPopup,AlteredStatusPopup,BonusMalusPopup,EditHeroPopup,AddAnimalPopup,DeletePopup,DescriptionPopup}
+export {
+  Health,
+  Defence,
+  Mana,
+  Fury,
+  DamagePopup,
+  HealPopup,
+  AlteredStatusPopup,
+  BonusMalusPopup,
+  EditHeroPopup,
+  AddAnimalPopup,
+  DeletePopup,
+  DeleteMonsterPopup,
+  DescriptionPopup,
+};
